@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.group.hotelmanagementsystem.mapper.HotelPropertyMapper">
+  <resultMap id="BaseResultMap" type="com.group.hotelmanagementsystem.entity.HotelProperty">
+    <id column="itemID" jdbcType="INTEGER" property="itemID" />
+    <result column="itemType" jdbcType="VARCHAR" property="itemType" />
+    <result column="itemQuantity" jdbcType="INTEGER" property="itemQuantity" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    itemID, itemType, itemQuantity
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from HotelProperty
+    where itemID = #{itemID,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select *
+    from HotelProperty
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from HotelProperty
+    where itemID = #{itemID,jdbcType=INTEGER}
+  </delete>
+  <update id="alterTable">
+    alter table HotelProperty auto_increment= 1
+  </update>
+  <insert id="insert" keyColumn="itemID" keyProperty="itemID" parameterType="com.group.hotelmanagementsystem.entity.HotelProperty" useGeneratedKeys="true">
+    insert into HotelProperty (itemType, itemQuantity)
+    values (#{itemType,jdbcType=VARCHAR}, #{itemQuantity,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" keyColumn="itemID" keyProperty="itemID" parameterType="com.group.hotelmanagementsystem.entity.HotelProperty" useGeneratedKeys="true">
+    insert into HotelProperty
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="itemType != null">
+        itemType,
+      </if>
+      <if test="itemQuantity != null">
+        itemQuantity,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="itemType != null">
+        #{itemType,jdbcType=VARCHAR},
+      </if>
+      <if test="itemQuantity != null">
+        #{itemQuantity,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.group.hotelmanagementsystem.entity.HotelProperty">
+    update HotelProperty
+    <set>
+      <if test="itemType != null">
+        itemType = #{itemType,jdbcType=VARCHAR},
+      </if>
+      <if test="itemQuantity != null">
+        itemQuantity = #{itemQuantity,jdbcType=INTEGER},
+      </if>
+    </set>
+    where itemID = #{itemID,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.group.hotelmanagementsystem.entity.HotelProperty">
+    update HotelProperty
+    set itemType = #{itemType,jdbcType=VARCHAR},
+      itemQuantity = #{itemQuantity,jdbcType=INTEGER}
+    where itemID = #{itemID,jdbcType=INTEGER}
+  </update>
+</mapper>

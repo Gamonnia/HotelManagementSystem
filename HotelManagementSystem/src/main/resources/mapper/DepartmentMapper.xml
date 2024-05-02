@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.group.hotelmanagementsystem.mapper.DepartmentMapper">
+  <resultMap id="BaseResultMap" type="com.group.hotelmanagementsystem.entity.Department">
+    <id column="departmentID" jdbcType="INTEGER" property="departmentID" />
+    <result column="departmentName" jdbcType="VARCHAR" property="departmentName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    departmentID, departmentName
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from Department
+    where departmentID = #{departmentID,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select *
+    from Department
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from Department
+    where departmentID = #{departmentID,jdbcType=INTEGER}
+  </delete>
+  <update id="alterTable">
+    alter table Department auto_increment= 1
+  </update>
+  <insert id="insert" keyColumn="departmentID" keyProperty="departmentID" parameterType="com.group.hotelmanagementsystem.entity.Department" useGeneratedKeys="true">
+    insert into Department (departmentName)
+    values (#{departmentName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="departmentID" keyProperty="departmentID" parameterType="com.group.hotelmanagementsystem.entity.Department" useGeneratedKeys="true">
+    insert into Department
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="departmentName != null">
+        departmentName,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="departmentName != null">
+        #{departmentName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.group.hotelmanagementsystem.entity.Department">
+    update Department
+    <set>
+      <if test="departmentName != null">
+        departmentName = #{departmentName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where departmentID = #{departmentID,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.group.hotelmanagementsystem.entity.Department">
+    update Department
+    set departmentName = #{departmentName,jdbcType=VARCHAR}
+    where departmentID = #{departmentID,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.group.hotelmanagementsystem.mapper.FinancialRecordMapper">
+  <resultMap id="BaseResultMap" type="com.group.hotelmanagementsystem.entity.FinancialRecord">
+    <id column="financialRecordID" jdbcType="INTEGER" property="financialRecordID" />
+    <result column="incomeOrExpense" jdbcType="VARCHAR" property="IncomeOrExpense" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="date" jdbcType="TIMESTAMP" property="date" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    financialRecordID, incomeOrExpense, amount, `date`
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from FinancialRecord
+    where financialRecordID = #{financialRecordID,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select *
+    from FinancialRecord
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from FinancialRecord
+    where financialRecordID = #{financialRecordID,jdbcType=INTEGER}
+  </delete>
+  <update id="alterTable">
+    alter table FinancialRecord auto_increment= 1
+  </update>
+  <insert id="insert" keyColumn="financialRecordID" keyProperty="financialRecordID" parameterType="com.group.hotelmanagementsystem.entity.FinancialRecord" useGeneratedKeys="true">
+    insert into FinancialRecord (incomeOrExpense, amount, `date`
+      )
+    values (#{incomeOrExpense,jdbcType=VARCHAR}, #{amount,jdbcType=DECIMAL}, #{date,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="financialRecordID" keyProperty="financialRecordID" parameterType="com.group.hotelmanagementsystem.entity.FinancialRecord" useGeneratedKeys="true">
+    insert into FinancialRecord
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="incomeOrExpense != null">
+        incomeOrExpense,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="date != null">
+        `date`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="incomeOrExpense != null">
+        #{incomeOrExpense,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="date != null">
+        #{date,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.group.hotelmanagementsystem.entity.FinancialRecord">
+    update FinancialRecord
+    <set>
+      <if test="incomeOrExpense != null">
+        incomeOrExpense = #{incomeOrExpense,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="date != null">
+        `date` = #{date,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where financialRecordID = #{financialRecordID,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.group.hotelmanagementsystem.entity.FinancialRecord">
+    update FinancialRecord
+    set incomeOrExpense = #{incomeOrExpense,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=DECIMAL},
+      `date` = #{date,jdbcType=TIMESTAMP}
+    where financialRecordID = #{financialRecordID,jdbcType=INTEGER}
+  </update>
+</mapper>

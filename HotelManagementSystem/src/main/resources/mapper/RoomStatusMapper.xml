@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.group.hotelmanagementsystem.mapper.RoomStatusMapper">
+  <resultMap id="BaseResultMap" type="com.group.hotelmanagementsystem.entity.RoomStatus">
+    <id column="roomStatusID" jdbcType="INTEGER" property="roomStatusID" />
+    <result column="roomStatusName" jdbcType="VARCHAR" property="roomStatusName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    roomStatusID, roomStatusName
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from RoomStatus
+    where roomStatusID = #{roomStatusID,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select *
+    from RoomStatus
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from RoomStatus
+    where roomStatusID = #{roomStatusID,jdbcType=INTEGER}
+  </delete>
+  <update id="alterTable">
+    alter table RoomStatus auto_increment= 1
+  </update>
+  <insert id="insert" keyColumn="roomStatusID" keyProperty="roomStatusID" parameterType="com.group.hotelmanagementsystem.entity.RoomStatus" useGeneratedKeys="true">
+    insert into RoomStatus (roomStatusName)
+    values (#{roomStatusName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="roomStatusID" keyProperty="roomStatusID" parameterType="com.group.hotelmanagementsystem.entity.RoomStatus" useGeneratedKeys="true">
+    insert into RoomStatus
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="roomStatusName != null">
+        roomStatusName,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="roomStatusName != null">
+        #{roomStatusName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.group.hotelmanagementsystem.entity.RoomStatus">
+    update RoomStatus
+    <set>
+      <if test="roomStatusName != null">
+        roomStatusName = #{roomStatusName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where roomStatusID = #{roomStatusID,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.group.hotelmanagementsystem.entity.RoomStatus">
+    update RoomStatus
+    set roomStatusName = #{roomStatusName,jdbcType=VARCHAR}
+    where roomStatusID = #{roomStatusID,jdbcType=INTEGER}
+  </update>
+</mapper>

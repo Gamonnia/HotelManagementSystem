@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.group.hotelmanagementsystem.mapper.AdminMapper">
+  <resultMap id="BaseResultMap" type="com.group.hotelmanagementsystem.entity.Admin">
+    <id column="adminAccount" jdbcType="INTEGER" property="adminAccount" />
+    <result column="adminPassword" jdbcType="VARCHAR" property="adminPassword" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    adminAccount, adminPassword
+  </sql>
+  <select id="login" parameterType="com.group.hotelmanagementsystem.entity.Admin" resultMap="BaseResultMap">
+    select *
+    from Admin
+    where adminAccount = #{adminAccount,jdbcType=INTEGER} and adminPassword = #{adminPassword,jdbcType=VARCHAR};
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from Admin
+    where adminAccount = #{adminAccount,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from Admin
+    where adminAccount = #{adminAccount,jdbcType=INTEGER}
+  </delete>
+  <update id="alterTable">
+    alter table Admin auto_increment= 1
+  </update>
+  <insert id="insert" keyColumn="adminAccount" keyProperty="adminAccount" parameterType="com.group.hotelmanagementsystem.entity.Admin" useGeneratedKeys="true">
+    insert into Admin (adminPassword)
+    values (#{adminPassword,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="adminAccount" keyProperty="adminAccount" parameterType="com.group.hotelmanagementsystem.entity.Admin" useGeneratedKeys="true">
+    insert into Admin
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="adminPassword != null">
+        adminPassword,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="adminPassword != null">
+        #{adminPassword,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.group.hotelmanagementsystem.entity.Admin">
+    update Admin
+    <set>
+      <if test="adminPassword != null">
+        adminPassword = #{adminPassword,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where adminAccount = #{adminAccount,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.group.hotelmanagementsystem.entity.Admin">
+    update Admin
+    set adminPassword = #{adminPassword,jdbcType=VARCHAR}
+    where adminAccount = #{adminAccount,jdbcType=INTEGER}
+  </update>
+</mapper>

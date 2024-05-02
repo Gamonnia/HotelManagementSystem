@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.group.hotelmanagementsystem.mapper.RoomTypeMapper">
+  <resultMap id="BaseResultMap" type="com.group.hotelmanagementsystem.entity.RoomType">
+    <id column="roomTypeID" jdbcType="INTEGER" property="roomTypeID" />
+    <result column="roomTypeName" jdbcType="VARCHAR" property="roomTypeName" />
+    <result column="roomPrice" jdbcType="DECIMAL" property="roomPrice" />
+    <result column="roomDeposit" jdbcType="DECIMAL" property="roomDeposit" />
+    <result column="roomSize" jdbcType="DECIMAL" property="roomSize" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    roomTypeID, roomTypeName, roomPrice, roomDeposit, roomSize
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from RoomType
+    where roomTypeID = #{roomTypeID,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select *
+    from RoomType
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from RoomType
+    where roomTypeID = #{roomTypeID,jdbcType=INTEGER}
+  </delete>
+  <update id="alterTable">
+    alter table RoomType auto_increment= 1
+  </update>
+  <insert id="insert" keyColumn="roomTypeID" keyProperty="roomTypeID" parameterType="com.group.hotelmanagementsystem.entity.RoomType" useGeneratedKeys="true">
+    insert into RoomType (roomTypeName, roomPrice, roomDeposit, 
+      roomSize)
+    values (#{roomTypeName,jdbcType=VARCHAR}, #{roomPrice,jdbcType=DECIMAL}, #{roomDeposit,jdbcType=DECIMAL}, 
+      #{roomSize,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" keyColumn="roomTypeID" keyProperty="roomTypeID" parameterType="com.group.hotelmanagementsystem.entity.RoomType" useGeneratedKeys="true">
+    insert into RoomType
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="roomTypeName != null">
+        roomTypeName,
+      </if>
+      <if test="roomPrice != null">
+        roomPrice,
+      </if>
+      <if test="roomDeposit != null">
+        roomDeposit,
+      </if>
+      <if test="roomSize != null">
+        roomSize,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="roomTypeName != null">
+        #{roomTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="roomPrice != null">
+        #{roomPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="roomDeposit != null">
+        #{roomDeposit,jdbcType=DECIMAL},
+      </if>
+      <if test="roomSize != null">
+        #{roomSize,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.group.hotelmanagementsystem.entity.RoomType">
+    update RoomType
+    <set>
+      <if test="roomTypeName != null">
+        roomTypeName = #{roomTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="roomPrice != null">
+        roomPrice = #{roomPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="roomDeposit != null">
+        roomDeposit = #{roomDeposit,jdbcType=DECIMAL},
+      </if>
+      <if test="roomSize != null">
+        roomSize = #{roomSize,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where roomTypeID = #{roomTypeID,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.group.hotelmanagementsystem.entity.RoomType">
+    update RoomType
+    set roomTypeName = #{roomTypeName,jdbcType=VARCHAR},
+      roomPrice = #{roomPrice,jdbcType=DECIMAL},
+      roomDeposit = #{roomDeposit,jdbcType=DECIMAL},
+      roomSize = #{roomSize,jdbcType=DECIMAL}
+    where roomTypeID = #{roomTypeID,jdbcType=INTEGER}
+  </update>
+</mapper>

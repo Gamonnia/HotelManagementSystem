@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.group.hotelmanagementsystem.mapper.ReservationRecordMapper">
+  <resultMap id="BaseResultMap" type="com.group.hotelmanagementsystem.entity.ReservationRecord">
+    <id column="reservationRecordID" jdbcType="INTEGER" property="reservationRecordID" />
+    <result column="customerName" jdbcType="VARCHAR" property="customerName" />
+    <result column="customerPhone" jdbcType="VARCHAR" property="customerPhone" />
+    <result column="roomTypeID" jdbcType="INTEGER" property="roomTypeID" />
+    <result column="expectedCheckIn" jdbcType="TIMESTAMP" property="expectedCheckIn" />
+    <result column="staffID" jdbcType="INTEGER" property="staffID" />
+    <result column="recordTime" jdbcType="TIMESTAMP" property="recordTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    reservationRecordID, customerName, customerPhone, roomTypeID, expectedCheckIn, staffID, 
+    recordTime
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ReservationRecord
+    where reservationRecordID = #{reservationRecordID,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select *
+    from ReservationRecord
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from ReservationRecord
+    where reservationRecordID = #{reservationRecordID,jdbcType=INTEGER}
+  </delete>
+  <update id="alterTable">
+    alter table ReservationRecord auto_increment= 1
+  </update>
+  <insert id="insert" keyColumn="reservationRecordID" keyProperty="reservationRecordID" parameterType="com.group.hotelmanagementsystem.entity.ReservationRecord" useGeneratedKeys="true">
+    insert into ReservationRecord (customerName, customerPhone, roomTypeID, 
+      expectedCheckIn, staffID, recordTime
+      )
+    values (#{customerName,jdbcType=VARCHAR}, #{customerPhone,jdbcType=VARCHAR}, #{roomTypeID,jdbcType=INTEGER}, 
+      #{expectedCheckIn,jdbcType=TIMESTAMP}, #{staffID,jdbcType=INTEGER}, #{recordTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="reservationRecordID" keyProperty="reservationRecordID" parameterType="com.group.hotelmanagementsystem.entity.ReservationRecord" useGeneratedKeys="true">
+    insert into ReservationRecord
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="customerName != null">
+        customerName,
+      </if>
+      <if test="customerPhone != null">
+        customerPhone,
+      </if>
+      <if test="roomTypeID != null">
+        roomTypeID,
+      </if>
+      <if test="expectedCheckIn != null">
+        expectedCheckIn,
+      </if>
+      <if test="staffID != null">
+        staffID,
+      </if>
+      <if test="recordTime != null">
+        recordTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="customerName != null">
+        #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="customerPhone != null">
+        #{customerPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="roomTypeID != null">
+        #{roomTypeID,jdbcType=INTEGER},
+      </if>
+      <if test="expectedCheckIn != null">
+        #{expectedCheckIn,jdbcType=TIMESTAMP},
+      </if>
+      <if test="staffID != null">
+        #{staffID,jdbcType=INTEGER},
+      </if>
+      <if test="recordTime != null">
+        #{recordTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.group.hotelmanagementsystem.entity.ReservationRecord">
+    update ReservationRecord
+    <set>
+      <if test="customerName != null">
+        customerName = #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="customerPhone != null">
+        customerPhone = #{customerPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="roomTypeID != null">
+        roomTypeID = #{roomTypeID,jdbcType=INTEGER},
+      </if>
+      <if test="expectedCheckIn != null">
+        expectedCheckIn = #{expectedCheckIn,jdbcType=TIMESTAMP},
+      </if>
+      <if test="staffID != null">
+        staffID = #{staffID,jdbcType=INTEGER},
+      </if>
+      <if test="recordTime != null">
+        recordTime = #{recordTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where reservationRecordID = #{reservationRecordID,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.group.hotelmanagementsystem.entity.ReservationRecord">
+    update ReservationRecord
+    set customerName = #{customerName,jdbcType=VARCHAR},
+      customerPhone = #{customerPhone,jdbcType=VARCHAR},
+      roomTypeID = #{roomTypeID,jdbcType=INTEGER},
+      expectedCheckIn = #{expectedCheckIn,jdbcType=TIMESTAMP},
+      staffID = #{staffID,jdbcType=INTEGER},
+      recordTime = #{recordTime,jdbcType=TIMESTAMP}
+    where reservationRecordID = #{reservationRecordID,jdbcType=INTEGER}
+  </update>
+</mapper>

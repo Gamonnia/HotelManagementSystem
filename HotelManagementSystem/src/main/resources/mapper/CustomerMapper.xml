@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.group.hotelmanagementsystem.mapper.CustomerMapper">
+  <resultMap id="BaseResultMap" type="com.group.hotelmanagementsystem.entity.Customer">
+    <id column="customerID" jdbcType="INTEGER" property="customerID" />
+    <result column="customerName" jdbcType="VARCHAR" property="customerName" />
+    <result column="gender" jdbcType="VARCHAR" property="gender" />
+    <result column="IDNumber" jdbcType="VARCHAR" property="IDNumber" />
+    <result column="phoneNumber" jdbcType="VARCHAR" property="phoneNumber" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    customerID, customerName, gender, IDNumber, phoneNumber
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from Customer
+    where customerID = #{customerID,jdbcType=INTEGER}
+  </select>
+  <select id="selectCustomer" parameterType= "com.group.hotelmanagementsystem.entity.Customer"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from Customer
+    where customerName = #{customerName,jdbcType=VARCHAR} and IDNumber = #{IDNumber,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select *
+    from Customer
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from Customer
+    where customerID = #{customerID,jdbcType=INTEGER}
+  </delete>
+  <update id="alterTable">
+    alter table Customer auto_increment= 1
+  </update>
+  <insert id="insert" keyColumn="customerID" keyProperty="customerID" parameterType="com.group.hotelmanagementsystem.entity.Customer" useGeneratedKeys="true">
+    insert into Customer (customerName, gender, IDNumber, phoneNumber)
+    values (#{customerName,jdbcType=VARCHAR}, #{gender,jdbcType=VARCHAR}, #{IDNumber,jdbcType=VARCHAR}, 
+      #{phoneNumber,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="customerID" keyProperty="customerID" parameterType="com.group.hotelmanagementsystem.entity.Customer" useGeneratedKeys="true">
+    insert into Customer
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="customerName != null">
+        customerName,
+      </if>
+      <if test="gender != null">
+        gender,
+      </if>
+      <if test="IDNumber != null">
+        IDNumber,
+      </if>
+      <if test="phoneNumber != null">
+        phoneNumber,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="customerName != null">
+        #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null">
+        #{gender,jdbcType=VARCHAR},
+      </if>
+      <if test="IDNumber != null">
+        #{IDNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNumber != null">
+        #{phoneNumber,jdbcType=VARCHAR},
+      </if>
+    </trim>
+
+    <selectKey keyProperty="customerID" order="AFTER" resultType="int">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.group.hotelmanagementsystem.entity.Customer">
+    update Customer
+    <set>
+      <if test="customerName != null">
+        customerName = #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null">
+        gender = #{gender,jdbcType=VARCHAR},
+      </if>
+      <if test="IDNumber != null">
+        IDNumber = #{IDNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNumber != null">
+        phoneNumber = #{phoneNumber,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where customerID = #{customerID,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.group.hotelmanagementsystem.entity.Customer">
+    update Customer
+    set customerName = #{customerName,jdbcType=VARCHAR},
+      gender = #{gender,jdbcType=VARCHAR},
+      IDNumber = #{IDNumber,jdbcType=VARCHAR},
+      phoneNumber = #{phoneNumber,jdbcType=VARCHAR},
+    where customerID = #{customerID,jdbcType=INTEGER}
+  </update>
+</mapper>

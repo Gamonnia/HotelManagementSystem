@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.group.hotelmanagementsystem.mapper.RoomMapper">
+  <resultMap id="BaseResultMap" type="com.group.hotelmanagementsystem.entity.Room">
+    <id column="roomID" jdbcType="INTEGER" property="roomID" />
+    <result column="roomTypeID" jdbcType="INTEGER" property="roomTypeID" />
+    <result column="roomStatusID" jdbcType="INTEGER" property="roomStatusID" />
+  </resultMap>
+  <resultMap id="RelationResultMap" type="com.group.hotelmanagementsystem.entity.Room" extends="BaseResultMap">
+    <association column="roomTypeID" javaType="com.group.hotelmanagementsystem.entity.RoomType" property="roomType" >
+      <id column="roomTypeID" jdbcType="INTEGER" property="roomTypeID" />
+      <result column="roomTypeName" jdbcType="VARCHAR" property="roomTypeName" />
+      <result column="roomPrice" jdbcType="DECIMAL" property="roomPrice" />
+      <result column="roomDeposit" jdbcType="DECIMAL" property="roomDeposit" />
+      <result column="roomSize" jdbcType="DECIMAL" property="roomSize" />
+    </association>
+    <association column="roomStatusID" javaType="com.group.hotelmanagementsystem.entity.RoomStatus" property="roomStatus" >
+      <id column="roomStatusID" jdbcType="INTEGER" property="roomStatusID" />
+      <result column="roomStatusName" jdbcType="VARCHAR" property="roomStatusName" />
+    </association>
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    roomID, roomTypeID, roomStatusID
+  </sql>
+  <sql id="All_Column_List">
+    *
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="RelationResultMap">
+    select 
+    <include refid="All_Column_List" />
+    from Room r
+    inner join RoomType rt on r.roomTypeID = rt.roomTypeID
+    inner join RoomStatus rs on r.roomStatusID = rs.roomStatusID
+    where roomID = #{roomID,jdbcType=INTEGER}
+
+  </select>
+  <select id="selectAll" resultMap="RelationResultMap">
+    select
+    <include refid="All_Column_List" />
+    from Room r
+    inner join RoomType rt on r.roomTypeID = rt.roomTypeID
+    inner join RoomStatus rs on r.roomStatusID = rs.roomStatusID
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from Room
+    where roomID = #{roomID,jdbcType=INTEGER}
+  </delete>
+  <update id="alterTable">
+    alter table Room auto_increment= 1
+  </update>
+  <insert id="insert" keyColumn="roomID" keyProperty="roomID" parameterType="com.group.hotelmanagementsystem.entity.Room" useGeneratedKeys="true">
+    insert into Room (roomID,roomTypeID, roomStatusID)
+    values (#{roomID,jdbcType=INTEGER}, #{roomTypeID,jdbcType=INTEGER}, #{roomStatusID,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" keyColumn="roomID" keyProperty="roomID" parameterType="com.group.hotelmanagementsystem.entity.Room" useGeneratedKeys="true">
+    insert into Room
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="roomID != null">
+        roomID,
+      </if>
+      <if test="roomTypeID != null">
+        roomTypeID,
+      </if>
+      <if test="roomStatusID != null">
+        roomStatusID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="roomID != null">
+        #{roomID,jdbcType=INTEGER},
+      </if>
+      <if test="roomTypeID != null">
+        #{roomTypeID,jdbcType=INTEGER},
+      </if>
+      <if test="roomStatusID != null">
+        #{roomStatusID,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.group.hotelmanagementsystem.entity.Room">
+    update Room
+    <set>
+      <if test="roomID != null">
+        roomID = #{roomID,jdbcType=INTEGER},
+      </if>
+      <if test="roomTypeID != null">
+        roomTypeID = #{roomTypeID,jdbcType=INTEGER},
+      </if>
+      <if test="roomStatusID != null">
+        roomStatusID = #{roomStatusID,jdbcType=INTEGER},
+      </if>
+    </set>
+    where roomID = #{roomID,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.group.hotelmanagementsystem.entity.Room">
+    update Room
+    set roomID = #{roomID,jdbcType=INTEGER},
+      roomTypeID = #{roomTypeID,jdbcType=INTEGER},
+      roomStatusID = #{roomStatusID,jdbcType=INTEGER}
+    where roomID = #{roomID,jdbcType=INTEGER}
+  </update>
+</mapper>

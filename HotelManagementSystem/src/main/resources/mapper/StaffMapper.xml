@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.group.hotelmanagementsystem.mapper.StaffMapper">
+  <resultMap id="BaseResultMap" type="com.group.hotelmanagementsystem.entity.Staff">
+    <id column="staffID" jdbcType="INTEGER" property="staffID" />
+    <result column="staffName" jdbcType="VARCHAR" property="staffName" />
+    <result column="position" jdbcType="VARCHAR" property="position" />
+    <result column="salary" jdbcType="DECIMAL" property="salary" />
+    <result column="departmentID" jdbcType="INTEGER" property="departmentID" />
+    <result column="gender" jdbcType="VARCHAR" property="gender" />
+    <result column="adminAccount" jdbcType="INTEGER" property="adminAccount" />
+  </resultMap>
+  <resultMap id="RelationResultMap" type="com.group.hotelmanagementsystem.entity.Staff" extends="BaseResultMap">
+    <association column="departmentID" javaType="com.group.hotelmanagementsystem.entity.Department" property="department">
+      <id column="departmentID" jdbcType="INTEGER" property="departmentID" />
+      <result column="departmentName" jdbcType="VARCHAR" property="departmentName" />
+    </association>
+  </resultMap>
+  <sql id="Base_Column_List">
+    staffID, staffName, `position`, salary, departmentID, gender, adminAccount
+  </sql>
+  <sql id="All_Column_List">
+    *
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="RelationResultMap">
+    select 
+    <include refid="All_Column_List" />
+    from Staff s
+    inner join Department d on s.departmentID = d.departmentID
+    where staffID = #{staffID,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="RelationResultMap">
+    select
+    <include refid="All_Column_List" />
+    from Staff s
+    inner join Department d on s.departmentID = d.departmentID
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from Staff
+    where staffID = #{staffID,jdbcType=INTEGER}
+  </delete>
+  <update id="alterTable">
+    alter table Staff auto_increment= 1
+  </update>
+  <insert id="insert" keyColumn="staffID" keyProperty="staffID" parameterType="com.group.hotelmanagementsystem.entity.Staff" useGeneratedKeys="true">
+    insert into Staff (staffName, `position`, salary, 
+      departmentID, gender, adminAccount
+      )
+    values (#{staffName,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, #{salary,jdbcType=DECIMAL}, 
+      #{departmentID,jdbcType=INTEGER}, #{gender,jdbcType=VARCHAR}, #{adminAccount,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="staffID" keyProperty="staffID" parameterType="com.group.hotelmanagementsystem.entity.Staff" useGeneratedKeys="true">
+    insert into Staff
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="staffName != null">
+        staffName,
+      </if>
+      <if test="position != null">
+        `position`,
+      </if>
+      <if test="salary != null">
+        salary,
+      </if>
+      <if test="departmentID != null">
+        departmentID,
+      </if>
+      <if test="gender != null">
+        gender,
+      </if>
+      <if test="adminAccount != null">
+        adminAccount,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="staffName != null">
+        #{staffName,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null">
+        #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="salary != null">
+        #{salary,jdbcType=DECIMAL},
+      </if>
+      <if test="departmentID != null">
+        #{departmentID,jdbcType=INTEGER},
+      </if>
+      <if test="gender != null">
+        #{gender,jdbcType=VARCHAR},
+      </if>
+      <if test="adminAccount != null">
+        #{adminAccount,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.group.hotelmanagementsystem.entity.Staff">
+    update Staff
+    <set>
+      <if test="staffName != null">
+        staffName = #{staffName,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null">
+        `position` = #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="salary != null">
+        salary = #{salary,jdbcType=DECIMAL},
+      </if>
+      <if test="departmentID != null">
+        departmentID = #{departmentID,jdbcType=INTEGER},
+      </if>
+      <if test="gender != null">
+        gender = #{gender,jdbcType=VARCHAR},
+      </if>
+      <if test="adminAccount != null">
+        adminAccount = #{adminAccount,jdbcType=INTEGER},
+      </if>
+    </set>
+    where staffID = #{staffID,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.group.hotelmanagementsystem.entity.Staff">
+    update Staff
+    set staffName = #{staffName,jdbcType=VARCHAR},
+      `position` = #{position,jdbcType=VARCHAR},
+      salary = #{salary,jdbcType=DECIMAL},
+      departmentID = #{departmentID,jdbcType=INTEGER},
+      gender = #{gender,jdbcType=VARCHAR},
+      adminAccount = #{adminAccount,jdbcType=INTEGER}
+    where staffID = #{staffID,jdbcType=INTEGER}
+  </update>
+</mapper>

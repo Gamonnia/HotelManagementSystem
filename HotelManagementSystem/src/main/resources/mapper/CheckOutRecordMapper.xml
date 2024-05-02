@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.group.hotelmanagementsystem.mapper.CheckOutRecordMapper">
+  <resultMap id="BaseResultMap" type="com.group.hotelmanagementsystem.entity.CheckOutRecord">
+    <id column="checkOutRecordID" jdbcType="INTEGER" property="checkOutRecordID" />
+    <result column="customerID" jdbcType="INTEGER" property="customerID" />
+    <result column="roomID" jdbcType="INTEGER" property="roomID" />
+    <result column="checkInTime" jdbcType="TIMESTAMP" property="checkInTime" />
+    <result column="checkOutTime" jdbcType="TIMESTAMP" property="checkOutTime" />
+    <result column="staffID" jdbcType="INTEGER" property="staffID" />
+    <result column="recordTime" jdbcType="TIMESTAMP" property="recordTime" />
+  </resultMap>
+  <resultMap id="RelationResultMap" type="com.group.hotelmanagementsystem.entity.CheckOutRecord" extends="BaseResultMap">
+    <association column="customerID" javaType="com.group.hotelmanagementsystem.entity.Customer" property="customer" >
+      <id column="customerID" jdbcType="INTEGER" property="customerID" />
+      <result column="customerName" jdbcType="VARCHAR" property="customerName" />
+      <result column="gender" jdbcType="VARCHAR" property="gender" />
+      <result column="IDNumber" jdbcType="VARCHAR" property="IDNumber" />
+      <result column="phoneNumber" jdbcType="VARCHAR" property="phoneNumber" />
+    </association>
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    checkOutRecordID, customerID, roomID, checkInTime, checkOutTime, staffID, recordTime
+  </sql>
+  <sql id="All_Column_List">
+    *
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="RelationResultMap">
+    select 
+    <include refid="All_Column_List" />
+    from CheckOutRecord chr
+    where checkOutRecordID = #{checkOutRecordID,jdbcType=INTEGER}
+    inner join Customer c on chr.customerID = c.customerID;
+  </select>
+  <select id="selectAll" resultMap="RelationResultMap">
+    select
+    <include refid="All_Column_List"/>
+    from CheckOutRecord chr
+    inner join Customer c on chr.customerID = c.customerID;
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from CheckOutRecord
+    where checkOutRecordID = #{checkOutRecordID,jdbcType=INTEGER}
+  </delete>
+  <update id="alterTable">
+    alter table CheckOutRecord auto_increment= 1
+  </update>
+  <insert id="insert" keyColumn="checkOutRecordID" keyProperty="checkOutRecordID" parameterType="com.group.hotelmanagementsystem.entity.CheckOutRecord" useGeneratedKeys="true">
+    insert into CheckOutRecord (customerID, roomID, checkInTime, 
+      checkOutTime, staffID, recordTime)
+    values (#{customerID,jdbcType=INTEGER}, #{roomID,jdbcType=INTEGER}, #{checkInTime,jdbcType=TIMESTAMP}, 
+      #{checkOutTime,jdbcType=TIMESTAMP}, #{staffID,jdbcType=INTEGER}, #{recordTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="checkOutRecordID" keyProperty="checkOutRecordID" parameterType="com.group.hotelmanagementsystem.entity.CheckOutRecord" useGeneratedKeys="true">
+    insert into CheckOutRecord
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="customerID != null">
+        customerID,
+      </if>
+      <if test="roomID != null">
+        roomID,
+      </if>
+      <if test="checkInTime != null">
+        checkInTime,
+      </if>
+      <if test="checkOutTime != null">
+        checkOutTime,
+      </if>
+      <if test="staffID != null">
+        staffID,
+      </if>
+      <if test="recordTime != null">
+        recordTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="customerID != null">
+        #{customerID,jdbcType=INTEGER},
+      </if>
+      <if test="roomID != null">
+        #{roomID,jdbcType=INTEGER},
+      </if>
+      <if test="checkInTime != null">
+        #{checkInTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="checkOutTime != null">
+        #{checkOutTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="staffID != null">
+        #{staffID,jdbcType=INTEGER},
+      </if>
+      <if test="recordTime != null">
+        #{recordTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.group.hotelmanagementsystem.entity.CheckOutRecord">
+    update CheckOutRecord
+    <set>
+      <if test="customerID != null">
+        customerID = #{customerID,jdbcType=INTEGER},
+      </if>
+      <if test="roomID != null">
+        roomID = #{roomID,jdbcType=INTEGER},
+      </if>
+      <if test="checkInTime != null">
+        checkInTime = #{checkInTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="checkOutTime != null">
+        checkOutTime = #{checkOutTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="staffID != null">
+        staffID = #{staffID,jdbcType=INTEGER},
+      </if>
+      <if test="recordTime != null">
+        recordTime = #{recordTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where checkOutRecordID = #{checkOutRecordID,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.group.hotelmanagementsystem.entity.CheckOutRecord">
+    update CheckOutRecord
+    set customerID = #{customerID,jdbcType=INTEGER},
+      roomID = #{roomID,jdbcType=INTEGER},
+      checkInTime = #{checkInTime,jdbcType=TIMESTAMP},
+      checkOutTime = #{checkOutTime,jdbcType=TIMESTAMP},
+      staffID = #{staffID,jdbcType=INTEGER},
+      recordTime = #{recordTime,jdbcType=TIMESTAMP}
+    where checkOutRecordID = #{checkOutRecordID,jdbcType=INTEGER}
+  </update>
+</mapper>
