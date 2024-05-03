@@ -19,7 +19,7 @@ public class JWTUtils {
         try {
             Calendar instance = Calendar.getInstance();
 
-            instance.add(Calendar.DATE,10000);
+            instance.add(Calendar.DATE,100000);
 
             JWTCreator.Builder builder = JWT.create();
             map.forEach(builder::withClaim);
