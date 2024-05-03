@@ -63,7 +63,7 @@ CREATE TABLE `CheckInRecord` (
   CONSTRAINT `checkinrecord_ibfk_1` FOREIGN KEY (`customerID`) REFERENCES `Customer` (`customerID`),
   CONSTRAINT `checkinrecord_ibfk_2` FOREIGN KEY (`roomID`) REFERENCES `Room` (`roomID`),
   CONSTRAINT `checkinrecord_ibfk_3` FOREIGN KEY (`staffID`) REFERENCES `Staff` (`staffID`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -72,7 +72,7 @@ CREATE TABLE `CheckInRecord` (
 
 LOCK TABLES `CheckInRecord` WRITE;
 /*!40000 ALTER TABLE `CheckInRecord` DISABLE KEYS */;
-INSERT INTO `CheckInRecord` (`checkInRecordID`, `customerID`, `roomID`, `checkInTime`, `expectedCheckOut`, `deposit`, `paymentAmount`, `staffID`, `recordTime`) VALUES (1,1,101,'2024-04-18 13:48:58','2024-04-19 12:49:00',40.00,200.00,100003,'2024-04-18 13:50:41'),(2,2,102,'2024-04-18 14:01:43','2024-04-21 14:01:44',120.00,600.00,100003,'2024-04-18 14:03:06');
+INSERT INTO `CheckInRecord` (`checkInRecordID`, `customerID`, `roomID`, `checkInTime`, `expectedCheckOut`, `deposit`, `paymentAmount`, `staffID`, `recordTime`) VALUES (1,1,101,'2024-04-18 13:48:58','2024-04-19 12:49:00',40.00,200.00,100002,'2024-04-18 13:50:41'),(2,2,102,'2024-04-18 14:01:43','2024-04-21 14:01:44',120.00,600.00,100003,'2024-04-18 14:03:06'),(3,1,101,'2024-04-18 17:00:00','2024-04-18 20:00:00',40.00,300.00,100003,'2024-04-18 20:00:00'),(4,3,103,'2024-04-18 17:00:00','2024-04-18 20:00:00',40.00,300.00,100001,'2024-04-18 20:00:00'),(5,5,111,'2024-04-27 12:00:00','2024-04-27 22:00:00',0.00,0.00,100003,'2024-04-27 12:00:00');
 /*!40000 ALTER TABLE `CheckInRecord` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -98,7 +98,7 @@ CREATE TABLE `CheckOutRecord` (
   CONSTRAINT `checkoutrecord_ibfk_1` FOREIGN KEY (`customerID`) REFERENCES `Customer` (`customerID`),
   CONSTRAINT `checkoutrecord_ibfk_2` FOREIGN KEY (`roomID`) REFERENCES `Room` (`roomID`),
   CONSTRAINT `checkoutrecord_ibfk_3` FOREIGN KEY (`staffID`) REFERENCES `Staff` (`staffID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -107,6 +107,7 @@ CREATE TABLE `CheckOutRecord` (
 
 LOCK TABLES `CheckOutRecord` WRITE;
 /*!40000 ALTER TABLE `CheckOutRecord` DISABLE KEYS */;
+INSERT INTO `CheckOutRecord` (`checkOutRecordID`, `customerID`, `roomID`, `checkInTime`, `checkOutTime`, `staffID`, `recordTime`) VALUES (1,1,101,'2024-04-18 17:00:00','2024-04-18 20:00:00',100003,'2024-04-18 20:00:00'),(2,1,101,'2024-04-18 17:00:00','2024-04-18 20:00:00',100003,'2024-04-18 20:00:00'),(3,1,101,'2024-04-18 17:00:00','2024-04-18 20:00:00',100003,'2024-04-18 20:00:00'),(4,1,101,'2024-04-18 17:00:00','2024-04-18 20:00:00',100003,'2024-04-18 20:00:00');
 /*!40000 ALTER TABLE `CheckOutRecord` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -123,11 +124,8 @@ CREATE TABLE `Customer` (
   `gender` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
   `IDNumber` varchar(18) COLLATE utf8mb4_general_ci NOT NULL,
   `phoneNumber` varchar(11) COLLATE utf8mb4_general_ci NOT NULL,
-  `staffID` int NOT NULL,
-  PRIMARY KEY (`customerID`),
-  KEY `Customer_ibfk_1` (`staffID`),
-  CONSTRAINT `Customer_ibfk_1` FOREIGN KEY (`staffID`) REFERENCES `Staff` (`staffID`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  PRIMARY KEY (`customerID`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -136,7 +134,7 @@ CREATE TABLE `Customer` (
 
 LOCK TABLES `Customer` WRITE;
 /*!40000 ALTER TABLE `Customer` DISABLE KEYS */;
-INSERT INTO `Customer` (`customerID`, `customerName`, `gender`, `IDNumber`, `phoneNumber`, `staffID`) VALUES (1,'Mr.D','Man','173646533747298798','19959118753',100003),(2,'Mrs.A','Woman','273748298467574893','18923421121',100003);
+INSERT INTO `Customer` (`customerID`, `customerName`, `gender`, `IDNumber`, `phoneNumber`) VALUES (1,'Mr.D','Man','173646533747298798','19959118753'),(2,'Mrs.A','Woman','273748298467574893','18923421121'),(3,'ddd','Man','273748298467574893','17263547587'),(4,'ddd','Man','273748298467574893','17263547587'),(5,'FireLily','Woman','200048298467574800','35663547587');
 /*!40000 ALTER TABLE `Customer` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -173,12 +171,10 @@ DROP TABLE IF EXISTS `FinancialRecord`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `FinancialRecord` (
   `financialRecordID` int NOT NULL AUTO_INCREMENT,
-  `reExMeansID` int NOT NULL COMMENT 'The hotel''s revenue and expenditure path',
+  `incomeOrExpense` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
   `amount` decimal(10,2) NOT NULL,
   `date` datetime NOT NULL,
-  PRIMARY KEY (`financialRecordID`),
-  KEY `PaymentMethodID` (`reExMeansID`),
-  CONSTRAINT `financialrecord_ibfk_1` FOREIGN KEY (`reExMeansID`) REFERENCES `ReExMeans` (`reExMeansID`)
+  PRIMARY KEY (`financialRecordID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -188,7 +184,7 @@ CREATE TABLE `FinancialRecord` (
 
 LOCK TABLES `FinancialRecord` WRITE;
 /*!40000 ALTER TABLE `FinancialRecord` DISABLE KEYS */;
-INSERT INTO `FinancialRecord` (`financialRecordID`, `reExMeansID`, `amount`, `date`) VALUES (1,3,310.00,'2024-04-18 13:42:20'),(2,1,-8000.00,'2024-04-14 13:42:54');
+INSERT INTO `FinancialRecord` (`financialRecordID`, `incomeOrExpense`, `amount`, `date`) VALUES (1,'Staff Wage',310.00,'2024-04-18 13:42:20'),(2,'Human Resources',-8000.00,'2024-04-14 13:42:54');
 /*!40000 ALTER TABLE `FinancialRecord` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -218,30 +214,6 @@ INSERT INTO `HotelProperty` (`itemID`, `itemType`, `itemQuantity`) VALUES (1,'Te
 UNLOCK TABLES;
 
 --
--- Table structure for table `ReExMeans`
---
-
-DROP TABLE IF EXISTS `ReExMeans`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `ReExMeans` (
-  `reExMeansID` int NOT NULL AUTO_INCREMENT,
-  `reExMeansName` varchar(50) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'The hotel''s revenue and expenditure path',
-  PRIMARY KEY (`reExMeansID`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `ReExMeans`
---
-
-LOCK TABLES `ReExMeans` WRITE;
-/*!40000 ALTER TABLE `ReExMeans` DISABLE KEYS */;
-INSERT INTO `ReExMeans` (`reExMeansID`, `reExMeansName`) VALUES (1,'Human Resources'),(2,'Cost of Room'),(3,'Room Fee Income'),(4,'Room Merchandise Revenue');
-/*!40000 ALTER TABLE `ReExMeans` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `ReservationRecord`
 --
 
@@ -261,7 +233,7 @@ CREATE TABLE `ReservationRecord` (
   KEY `RoomTypeID` (`roomTypeID`),
   CONSTRAINT `reservationrecord_ibfk_1` FOREIGN KEY (`roomTypeID`) REFERENCES `RoomType` (`roomTypeID`),
   CONSTRAINT `reservationrecord_ibfk_2` FOREIGN KEY (`staffID`) REFERENCES `Staff` (`staffID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -270,7 +242,7 @@ CREATE TABLE `ReservationRecord` (
 
 LOCK TABLES `ReservationRecord` WRITE;
 /*!40000 ALTER TABLE `ReservationRecord` DISABLE KEYS */;
-INSERT INTO `ReservationRecord` (`reservationRecordID`, `customerName`, `customerPhone`, `roomTypeID`, `expectedCheckIn`, `staffID`, `recordTime`) VALUES (1,'Mr.D','19959118753',1,'2024-04-18 13:32:27',100003,'2024-04-18 13:32:33');
+INSERT INTO `ReservationRecord` (`reservationRecordID`, `customerName`, `customerPhone`, `roomTypeID`, `expectedCheckIn`, `staffID`, `recordTime`) VALUES (1,'Mr.D','19959118753',1,'2024-04-18 13:32:27',100003,'2024-04-18 13:32:33'),(2,'adas','12312',3,'2024-04-27 12:00:00',100003,'2024-04-27 12:00:00');
 /*!40000 ALTER TABLE `ReservationRecord` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -299,7 +271,7 @@ CREATE TABLE `Room` (
 
 LOCK TABLES `Room` WRITE;
 /*!40000 ALTER TABLE `Room` DISABLE KEYS */;
-INSERT INTO `Room` (`roomID`, `roomTypeID`, `roomStatusID`) VALUES (101,1,1),(102,1,1),(103,1,1),(104,1,1),(105,1,1),(106,1,1),(107,2,1),(108,2,1),(109,2,1),(110,2,1),(111,3,1),(112,3,1),(113,3,1);
+INSERT INTO `Room` (`roomID`, `roomTypeID`, `roomStatusID`) VALUES (101,1,1),(102,1,1),(103,1,1),(104,1,1),(105,1,1),(106,1,1),(107,2,1),(108,2,1),(109,2,1),(110,2,1),(111,3,1),(112,3,1),(113,3,1),(201,1,1);
 /*!40000 ALTER TABLE `Room` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -396,4 +368,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-04-18 15:35:04
+-- Dump completed on 2024-05-03 15:27:39
