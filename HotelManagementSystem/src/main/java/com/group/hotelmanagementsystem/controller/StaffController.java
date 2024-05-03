@@ -26,9 +26,11 @@ public class StaffController {
     public String deleteByPrimaryKey(@RequestParam("staffID") Integer staffID) {
         try {
             staffService.deleteByPrimaryKey(staffID);
+            adminService.deleteByPrimaryKey(staffID);
             log.info("Delete staffID: {}, success.", staffID);
             staffService.alterTable();
-            log.info("Alter table Staff increment success.");
+            adminService.alterTable();
+            log.info("Alter table Staff & Admin increment success.");
             return "Delete staffID: " + staffID + " success.";
         } catch (Exception e) {
             log.info("Delete Staff or Alter Table failed.");
