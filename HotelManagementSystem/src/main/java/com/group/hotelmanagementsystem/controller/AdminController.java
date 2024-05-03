@@ -23,7 +23,7 @@ public class AdminController {
     public Map<String, Object> login(@RequestBody Admin admin) {
         log.info("Admin Login......");
         log.info("Admin Account: {}", admin.getAdminAccount());
-        log.info("Admin Password: {}", admin.getAdminPassword());
+        // log.info("Admin Password: {}", admin.getAdminPassword());
 
         Map<String, Object> resultMap = new HashMap<>();
 
@@ -43,5 +43,4 @@ public class AdminController {
         }
         return resultMap;
     }
-
 }

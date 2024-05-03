@@ -25,8 +25,6 @@ public class Staff implements Serializable {
 
     private String gender;
 
-    private Integer adminAccount;
-
     private Department department;
 
     @Serial
@@ -90,16 +88,6 @@ public class Staff implements Serializable {
     @JsonProperty(value = "gender")
     public void setGender(String gender) {
         this.gender = gender;
-    }
-
-    @JsonProperty(value = "adminAccount")
-    public Integer getAdminAccount() {
-        return adminAccount;
-    }
-
-    @JsonProperty(value = "adminAccount")
-    public void setAdminAccount(Integer adminAccount) {
-        this.adminAccount = adminAccount;
     }
 
     @JsonProperty(value = "department")

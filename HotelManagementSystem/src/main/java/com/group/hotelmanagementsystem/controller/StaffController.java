@@ -1,6 +1,8 @@
 package com.group.hotelmanagementsystem.controller;
 
+import com.group.hotelmanagementsystem.entity.Admin;
 import com.group.hotelmanagementsystem.entity.Staff;
+import com.group.hotelmanagementsystem.service.AdminService;
 import com.group.hotelmanagementsystem.service.StaffService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,9 @@ public class StaffController {
 
     @Autowired
     private StaffService staffService;
+
+    @Autowired
+    private AdminService adminService;
 
     @RequestMapping(value = "/deleteByPrimaryKey")
     public String deleteByPrimaryKey(@RequestParam("staffID") Integer staffID) {
@@ -38,6 +43,15 @@ public class StaffController {
         try {
             staffService.insert(record);
             log.info("Insert staff success.");
+
+            log.info("Create Admin Account.......");
+            Admin admin = new Admin();
+            // default AdminAccount & Password
+            admin.setAdminAccount(record.getStaffID());
+            admin.setAdminPassword(record.getStaffID().toString());
+            adminService.insert(admin);
+            log.info("Create Admin Account success.");
+
             return staffService.selectByPrimaryKey(record.getStaffID());
         } catch (Exception e) {
             log.info("Insert staff failed.");

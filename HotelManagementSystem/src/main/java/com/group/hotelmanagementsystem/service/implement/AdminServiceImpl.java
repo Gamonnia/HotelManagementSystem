@@ -16,8 +16,33 @@ public class AdminServiceImpl implements AdminService {
     private AdminMapper adminMapper;
 
     @Override
+    public int deleteByPrimaryKey(Integer adminAccount) {
+        return adminMapper.deleteByPrimaryKey(adminAccount);
+    }
+
+    @Override
+    public int insert(Admin admin) {
+        return adminMapper.insert(admin);
+    }
+
+    @Override
+    public int insertSelective(Admin admin) {
+        return adminMapper.insertSelective(admin);
+    }
+
+    @Override
     public Admin selectByPrimaryKey(Integer adminAccount) {
         return adminMapper.selectByPrimaryKey(adminAccount);
+    }
+
+    @Override
+    public int updateByPrimaryKeySelective(Admin admin) {
+        return adminMapper.updateByPrimaryKeySelective(admin);
+    }
+
+    @Override
+    public int updateByPrimaryKey(Admin admin) {
+        return adminMapper.updateByPrimaryKey(admin);
     }
 
     @Override
