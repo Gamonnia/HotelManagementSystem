@@ -1,7 +1,9 @@
 package com.group.hotelmanagementsystem.controller;
 
 import com.group.hotelmanagementsystem.entity.ReservationRecord;
+import com.group.hotelmanagementsystem.entity.Room;
 import com.group.hotelmanagementsystem.service.ReservationRecordService;
+import com.group.hotelmanagementsystem.service.RoomService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,8 @@ public class ReservationRecordController {
     @Autowired
     private ReservationRecordService reservationRecordService;
 
+    @Autowired
+    private RoomService roomService;
 
     @RequestMapping(value = "/deleteByPrimaryKey")
     public String deleteByPrimaryKey(@RequestParam("reservationID") Integer reservationRecordID) {
@@ -25,6 +29,11 @@ public class ReservationRecordController {
             log.info("Delete reservationID: {}, success.", reservationRecordID);
             reservationRecordService.alterTable();
             log.info("Alter table ReservationRecord increment success.");
+            // update room status
+            Room room = new Room();
+            room.setRoomStatusID(1);
+            roomService.updateByPrimaryKeySelective(room);
+            log.info("Delete - room update success");
             return "Delete reservationID: " + reservationRecordID + " success.";
         } catch (Exception e) {
             log.info("Delete ReservationRecord or Alter Table failed.");
@@ -39,6 +48,11 @@ public class ReservationRecordController {
         try {
             reservationRecordService.insert(record);
             log.info("Insert reservationRecord success.");
+            // update room status
+            Room room = new Room();
+            room.setRoomStatusID(4);
+            roomService.updateByPrimaryKeySelective(room);
+            log.info("Insert - room update success");
             return reservationRecordService.selectByPrimaryKey(record.getReservationRecordID());
         } catch (Exception e) {
             log.info("Insert ReservationRecord failed.");
@@ -53,6 +67,11 @@ public class ReservationRecordController {
         try {
             reservationRecordService.insertSelective(record);
             log.info("InsertSelective reservationRecord success.");
+            // update room status
+            Room room = new Room();
+            room.setRoomStatusID(4);
+            roomService.updateByPrimaryKeySelective(room);
+            log.info("InsertSelective - room update success");
             return reservationRecordService.selectByPrimaryKey(record.getReservationRecordID());
         } catch (Exception e) {
             log.info("InsertSelective ReservationRecord failed.");

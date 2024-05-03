@@ -1,8 +1,9 @@
 package com.group.hotelmanagementsystem.controller;
 
 import com.group.hotelmanagementsystem.entity.CheckOutRecord;
+import com.group.hotelmanagementsystem.entity.Room;
 import com.group.hotelmanagementsystem.service.CheckOutRecordService;
-import com.group.hotelmanagementsystem.service.CustomerService;
+import com.group.hotelmanagementsystem.service.RoomService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,9 @@ public class CheckOutRecordController {
     @Autowired
     private CheckOutRecordService checkOutRecordService;
 
+    @Autowired
+    private RoomService roomService;
+
     @RequestMapping(value = "/deleteByPrimaryKey")
     public String deleteByPrimaryKey(@RequestParam("CheckOutRecordID") Integer checkOutRecordID) {
         try {
@@ -26,6 +30,11 @@ public class CheckOutRecordController {
             log.info("Delete checkOutRecordID: {}, success.", checkOutRecordID);
             checkOutRecordService.alterTable();
             log.info("Alter table CheckOutRecord increment success.");
+            // update room status
+            Room room = new Room();
+            room.setRoomStatusID(1);
+            roomService.updateByPrimaryKeySelective(room);
+            log.info("Delete - room update success");
             return "Delete checkOutRecordID: " + checkOutRecordID + " success.";
         } catch (Exception e) {
             log.info("Delete CheckOutRecord or Alter Table failed.");
@@ -40,6 +49,11 @@ public class CheckOutRecordController {
         try {
             checkOutRecordService.insert(record);
             log.info("Insert checkOutRecord success.");
+            // update room status
+            Room room = new Room();
+            room.setRoomStatusID(1);
+            roomService.updateByPrimaryKeySelective(room);
+            log.info("Insert - Room update success");
             return checkOutRecordService.selectByPrimaryKey(record.getCheckOutRecordID());
         } catch (Exception e) {
             log.info("Insert checkOutRecord failed.");
@@ -54,6 +68,11 @@ public class CheckOutRecordController {
         try {
             checkOutRecordService.insertSelective(record);
             log.info("InsertSelective checkOutRecord success.");
+            // update room status
+            Room room = new Room();
+            room.setRoomStatusID(1);
+            roomService.updateByPrimaryKeySelective(room);
+            log.info("InsertSelective - room update success");
             return checkOutRecordService.selectByPrimaryKey(record.getCheckOutRecordID());
         } catch (Exception e) {
             log.info("InsertSelective checkOutRecord failed.");

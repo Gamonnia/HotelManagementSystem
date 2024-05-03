@@ -2,8 +2,10 @@ package com.group.hotelmanagementsystem.controller;
 
 import com.group.hotelmanagementsystem.entity.CheckInRecord;
 import com.group.hotelmanagementsystem.entity.Customer;
+import com.group.hotelmanagementsystem.entity.Room;
 import com.group.hotelmanagementsystem.service.CheckInRecordService;
 import com.group.hotelmanagementsystem.service.CustomerService;
+import com.group.hotelmanagementsystem.service.RoomService;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +26,9 @@ public class CheckInRecordController {
     @Autowired
     private CustomerService customerService;
 
+    @Autowired
+    private RoomService roomService;
+
     @RequestMapping(value = "/deleteByPrimaryKey")
     public String deleteByPrimaryKey(@RequestParam("checkInRecordID") Integer checkInRecordID) {
         try {
@@ -31,6 +36,11 @@ public class CheckInRecordController {
             log.info("Delete checkInRecordID: {}, success.", checkInRecordID);
             checkInRecordService.alterTable();
             log.info("Alter table CheckInRecord increment success.");
+            // update room status
+            Room room = new Room();
+            room.setRoomStatusID(1);
+            roomService.updateByPrimaryKeySelective(room);
+            log.info("Delete - room update success");
             return "Delete checkInRecordID: " + checkInRecordID + " success.";
         } catch (Exception e) {
             log.info("Delete CheckInRecord or Alter Table failed.");
@@ -49,7 +59,13 @@ public class CheckInRecordController {
             } else param.setCustomer(customer);
 
             param.getCheckInRecord().setCustomerID(param.getCustomer().getCustomerID());
+            checkInRecordService.insert(param.getCheckInRecord());
             log.info("Insert checkInRecord success");
+            // update room status
+            Room room = new Room();
+            room.setRoomStatusID(3);
+            roomService.updateByPrimaryKeySelective(room);
+            log.info("Insert - Room update success");
             return checkInRecordService.selectByPrimaryKey(param.getCheckInRecord().getCheckInRecordID());
         } catch (Exception e) {
             log.info("Insert checkInRecord failed");
@@ -68,7 +84,13 @@ public class CheckInRecordController {
             } else param.setCustomer(customer);
 
             param.getCheckInRecord().setCustomerID(param.getCustomer().getCustomerID());
+            checkInRecordService.insertSelective(param.getCheckInRecord());
             log.info("InsertSelective success");
+            // update room status
+            Room room = new Room();
+            room.setRoomStatusID(3);
+            roomService.updateByPrimaryKeySelective(room);
+            log.info("InsertSelective - Room update success");
             return checkInRecordService.selectByPrimaryKey(param.getCheckInRecord().getCheckInRecordID());
         } catch (Exception e) {
             log.info("InsertSelective fail");
