@@ -25,7 +25,8 @@ DROP TABLE IF EXISTS `Admin`;
 CREATE TABLE `Admin` (
   `adminAccount` int NOT NULL AUTO_INCREMENT,
   `adminPassword` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
-  PRIMARY KEY (`adminAccount`)
+  PRIMARY KEY (`adminAccount`),
+  CONSTRAINT `Admin_Staff_staffID_fk` FOREIGN KEY (`adminAccount`) REFERENCES `Staff` (`staffID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=100006 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -35,7 +36,7 @@ CREATE TABLE `Admin` (
 
 LOCK TABLES `Admin` WRITE;
 /*!40000 ALTER TABLE `Admin` DISABLE KEYS */;
-INSERT INTO `Admin` (`adminAccount`, `adminPassword`) VALUES (100001,'123456'),(100002,'123456'),(100003,'123456'),(100004,'123456'),(100005,'100004');
+INSERT INTO `Admin` (`adminAccount`, `adminPassword`) VALUES (100001,'123456'),(100002,'123456'),(100003,'123456'),(100004,'123456'),(100005,'100005');
 /*!40000 ALTER TABLE `Admin` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -342,9 +343,8 @@ CREATE TABLE `Staff` (
   `gender` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`staffID`),
   KEY `Staff_ibfk_1` (`departmentID`),
-  CONSTRAINT `Staff_Admin_adminAccount_fk` FOREIGN KEY (`staffID`) REFERENCES `Admin` (`adminAccount`),
   CONSTRAINT `Staff_ibfk_1` FOREIGN KEY (`departmentID`) REFERENCES `Department` (`departmentID`)
-) ENGINE=InnoDB AUTO_INCREMENT=100005 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=100006 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -353,7 +353,7 @@ CREATE TABLE `Staff` (
 
 LOCK TABLES `Staff` WRITE;
 /*!40000 ALTER TABLE `Staff` DISABLE KEYS */;
-INSERT INTO `Staff` (`staffID`, `staffName`, `position`, `salary`, `departmentID`, `gender`) VALUES (100001,'LiHong Wang','General Manager',8000.00,7,'Man'),(100002,'MingYang Zhang','Security Manager',8000.00,3,'Man'),(100003,'Bochao Duan','Receptionist',3000.00,1,'Man'),(100004,'kaf','Virtual Singer',10000.00,1,'Woman');
+INSERT INTO `Staff` (`staffID`, `staffName`, `position`, `salary`, `departmentID`, `gender`) VALUES (100001,'LiHong Wang','General Manager',200.00,7,'Man'),(100002,'MingYang Zhang','Security Manager',8000.00,3,'Man'),(100003,'Bochao Duan','Receptionist',3000.00,1,'Man'),(100004,'kaf','Virtual Singer',10000.00,1,'Woman'),(100005,'tttt','jbr',3.00,3,'Man');
 /*!40000 ALTER TABLE `Staff` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -366,4 +366,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-03 20:44:35
+-- Dump completed on 2024-05-04  0:44:37
