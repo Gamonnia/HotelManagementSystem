@@ -97,7 +97,7 @@
     set customerName = #{customerName,jdbcType=VARCHAR},
       gender = #{gender,jdbcType=VARCHAR},
       IDNumber = #{IDNumber,jdbcType=VARCHAR},
-      phoneNumber = #{phoneNumber,jdbcType=VARCHAR},
+      phoneNumber = #{phoneNumber,jdbcType=VARCHAR}
     where customerID = #{customerID,jdbcType=INTEGER}
   </update>
 </mapper>

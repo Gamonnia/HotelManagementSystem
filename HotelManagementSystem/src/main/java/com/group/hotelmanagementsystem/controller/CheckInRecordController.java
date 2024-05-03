@@ -114,29 +114,33 @@ public class CheckInRecordController {
 
 
     @RequestMapping(value = "/updateByPrimaryKey")
-    public CheckInRecord updateByPrimaryKey(@RequestBody CheckInRecord record) {
+    public CheckInRecord updateByPrimaryKey(@RequestBody ParamOfCheckInRecord param) {
         try{
-            checkInRecordService.updateByPrimaryKey(record);
-            log.info("update checkInRecordID={} success.", record.getCheckInRecordID());
-            return checkInRecordService.selectByPrimaryKey(record.getCheckInRecordID());
+            checkInRecordService.updateByPrimaryKey(param.getCheckInRecord());
+            log.info("update checkInRecordID={} success.", param.getCheckInRecord().getCheckInRecordID());
+            customerService.updateByPrimaryKey(param.getCustomer());
+            log.info("update customerID={} success.", param.getCustomer().getCustomerID());
+            return checkInRecordService.selectByPrimaryKey(param.getCheckInRecord().getCheckInRecordID());
         }catch (Exception e){
-            log.info("update checkInRecordID={} failed.", record.getCheckInRecordID());
+            log.info("update checkInRecordID={} failed.", param.getCheckInRecord().getCheckInRecordID());
             log.error(e.getMessage());
-            return checkInRecordService.selectByPrimaryKey(record.getCheckInRecordID());
+            return checkInRecordService.selectByPrimaryKey(param.getCheckInRecord().getCheckInRecordID());
         }
     }
 
 
     @RequestMapping(value = "/updateByPrimaryKeySelective")
-    public CheckInRecord updateByPrimaryKeySelective(@RequestBody CheckInRecord record) {
+    public CheckInRecord updateByPrimaryKeySelective(@RequestBody ParamOfCheckInRecord param) {
         try {
-            checkInRecordService.updateByPrimaryKeySelective(record);
-            log.info("updateSelective checkInRecordID={} success.", record.getCheckInRecordID());
-            return checkInRecordService.selectByPrimaryKey(record.getCheckInRecordID());
+            checkInRecordService.updateByPrimaryKeySelective(param.getCheckInRecord());
+            log.info("updateSelective checkInRecordID={} success.", param.getCheckInRecord().getCheckInRecordID());
+            customerService.updateByPrimaryKey(param.getCustomer());
+            log.info("updateSelective customerID={} success.", param.getCustomer().getCustomerID());
+            return checkInRecordService.selectByPrimaryKey(param.getCheckInRecord().getCheckInRecordID());
         } catch (Exception e) {
-            log.info("updateSelective checkInRecordID={} failed.", record.getCheckInRecordID());
+            log.info("updateSelective checkInRecordID={} failed.", param.getCheckInRecord().getCheckInRecordID());
             log.error(e.getMessage());
-            return checkInRecordService.selectByPrimaryKey(record.getCheckInRecordID());
+            return checkInRecordService.selectByPrimaryKey(param.getCheckInRecord().getCheckInRecordID());
         }
     }
 
