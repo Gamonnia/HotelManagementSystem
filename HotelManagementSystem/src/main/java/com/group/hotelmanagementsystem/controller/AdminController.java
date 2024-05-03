@@ -43,4 +43,19 @@ public class AdminController {
         }
         return resultMap;
     }
+
+    @RequestMapping("/deleteByPrimaryKey")
+    public String deleteByPrimaryKey(@RequestParam("adminAccount") Integer adminAccount) {
+        try {
+            adminService.deleteByPrimaryKey(adminAccount);
+            log.info("Delete adminAccount: {}, success.", adminAccount);
+            adminService.alterTable();
+            log.info("Alter table Admin increment success.");
+            return "Delete adminAccount: " + adminAccount + " success.";
+        } catch (Exception e) {
+            log.info("Delete Admin or Alter Table failed.");
+            log.error(e.getMessage());
+            return "Delete adminAccount: " + adminAccount + " failed.";
+        }
+    }
 }

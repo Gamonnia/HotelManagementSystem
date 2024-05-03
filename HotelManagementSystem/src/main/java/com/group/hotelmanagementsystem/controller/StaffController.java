@@ -25,11 +25,11 @@ public class StaffController {
     @RequestMapping(value = "/deleteByPrimaryKey")
     public String deleteByPrimaryKey(@RequestParam("staffID") Integer staffID) {
         try {
-            staffService.deleteByPrimaryKey(staffID);
             adminService.deleteByPrimaryKey(staffID);
+            staffService.deleteByPrimaryKey(staffID);
             log.info("Delete staffID: {}, success.", staffID);
-            staffService.alterTable();
             adminService.alterTable();
+            staffService.alterTable();
             log.info("Alter table Staff & Admin increment success.");
             return "Delete staffID: " + staffID + " success.";
         } catch (Exception e) {
