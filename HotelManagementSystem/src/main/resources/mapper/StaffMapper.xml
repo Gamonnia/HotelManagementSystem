@@ -113,7 +113,7 @@
       `position` = #{position,jdbcType=VARCHAR},
       salary = #{salary,jdbcType=DECIMAL},
       departmentID = #{departmentID,jdbcType=INTEGER},
-      gender = #{gender,jdbcType=VARCHAR},
+      gender = #{gender,jdbcType=VARCHAR}
     where staffID = #{staffID,jdbcType=INTEGER}
   </update>
 </mapper>
