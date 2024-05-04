@@ -13,6 +13,8 @@ public interface ReservationRecordService {
 
     ReservationRecord selectByPrimaryKey(Integer reservationRecordID);
 
+    ReservationRecord selectByCustomerName(String customerName);
+
     int updateByPrimaryKeySelective(ReservationRecord record);
 
     int updateByPrimaryKey(ReservationRecord record);

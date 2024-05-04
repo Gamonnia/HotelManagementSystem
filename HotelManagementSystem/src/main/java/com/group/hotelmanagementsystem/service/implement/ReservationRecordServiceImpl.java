@@ -35,6 +35,11 @@ public class ReservationRecordServiceImpl implements ReservationRecordService {
     }
 
     @Override
+    public ReservationRecord selectByCustomerName(String customerName) {
+        return reservationRecordMapper.selectByCustomerName(customerName);
+    }
+
+    @Override
     public int updateByPrimaryKeySelective(ReservationRecord record) {
         return reservationRecordMapper.updateByPrimaryKeySelective(record);
     }

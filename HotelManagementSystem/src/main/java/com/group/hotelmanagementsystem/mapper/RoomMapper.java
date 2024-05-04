@@ -15,6 +15,10 @@ public interface RoomMapper {
 
     Room selectByPrimaryKey(Integer roomID);
 
+    List<Room> selectByRoomTypeID(Integer roomTypeID);
+
+    List<Room> selectByRoomStatusIDAndRoomTypeID(Room room);
+
     int updateByPrimaryKeySelective(Room record);
 
     int updateByPrimaryKey(Room record);

@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 @RestController
 @CrossOrigin
@@ -25,15 +27,23 @@ public class ReservationRecordController {
     @RequestMapping(value = "/deleteByPrimaryKey")
     public String deleteByPrimaryKey(@RequestParam("reservationID") Integer reservationRecordID) {
         try {
+            // update room status
+            ReservationRecord reservationRecord = reservationRecordService.selectByPrimaryKey(reservationRecordID);
+            Room reservedRoom = new Room();
+            reservedRoom.setRoomStatusID(4);
+            reservedRoom.setRoomTypeID(reservationRecord.getRoomTypeID());
+            List<Room> roomList = roomService.selectByRoomStatusIDAndRoomTypeID(reservedRoom);
+            Room room = getRandomElement(roomList);
+            if (room != null) {
+                room.setRoomStatusID(1);
+                roomService.updateByPrimaryKeySelective(room);
+                log.info("Delete - room update success");
+            } else log.info("Delete - Don't have any available room.);");
+            // delete
             reservationRecordService.deleteByPrimaryKey(reservationRecordID);
             log.info("Delete reservationID: {}, success.", reservationRecordID);
             reservationRecordService.alterTable();
             log.info("Alter table ReservationRecord increment success.");
-            // update room status
-            Room room = new Room();
-            room.setRoomStatusID(1);
-            roomService.updateByPrimaryKeySelective(room);
-            log.info("Delete - room update success");
             return "Delete reservationID: " + reservationRecordID + " success.";
         } catch (Exception e) {
             log.info("Delete ReservationRecord or Alter Table failed.");
@@ -46,14 +56,21 @@ public class ReservationRecordController {
     @RequestMapping(value = "/insert")
     public ReservationRecord insert(@RequestBody ReservationRecord record) {
         try {
-            reservationRecordService.insert(record);
-            log.info("Insert reservationRecord success.");
-            // update room status
-            Room room = new Room();
-            room.setRoomStatusID(4);
-            roomService.updateByPrimaryKeySelective(room);
-            log.info("Insert - room update success");
-            return reservationRecordService.selectByPrimaryKey(record.getReservationRecordID());
+            // assign room
+            List<Room> roomList = roomService.selectByRoomByTypeID(record.getRoomTypeID());
+            Room room = getRandomElement(roomList);
+            if (room != null) {
+                reservationRecordService.insert(record);
+                log.info("Insert reservationRecord success.");
+                // update room status
+                room.setRoomStatusID(4);
+                roomService.updateByPrimaryKeySelective(room);
+                log.info("Insert - room update success");
+                return reservationRecordService.selectByPrimaryKey(record.getReservationRecordID());
+            } else {
+                log.info("Don't have any available room.");
+                return null;
+            }
         } catch (Exception e) {
             log.info("Insert ReservationRecord failed.");
             log.error(e.getMessage());
@@ -65,14 +82,21 @@ public class ReservationRecordController {
     @RequestMapping(value = "/insertSelective")
     public ReservationRecord insertSelective(@RequestBody ReservationRecord record) {
         try {
-            reservationRecordService.insertSelective(record);
-            log.info("InsertSelective reservationRecord success.");
-            // update room status
-            Room room = new Room();
-            room.setRoomStatusID(4);
-            roomService.updateByPrimaryKeySelective(room);
-            log.info("InsertSelective - room update success");
-            return reservationRecordService.selectByPrimaryKey(record.getReservationRecordID());
+            // assign room
+            List<Room> roomList = roomService.selectByRoomByTypeID(record.getRoomTypeID());
+            Room room = getRandomElement(roomList);
+            if (room != null) {
+                reservationRecordService.insertSelective(record);
+                log.info("InsertSelective reservationRecord success.");
+                // update room status
+                room.setRoomStatusID(4);
+                roomService.updateByPrimaryKeySelective(room);
+                log.info("InsertSelective - room update success");
+                return reservationRecordService.selectByPrimaryKey(record.getReservationRecordID());
+            } else {
+                log.info("InsertSelective - Don't have any available room.");
+                return null;
+            }
         } catch (Exception e) {
             log.info("InsertSelective ReservationRecord failed.");
             log.error(e.getMessage());
@@ -132,5 +156,15 @@ public class ReservationRecordController {
             log.error(e.getMessage());
             return null;
         }
+    }
+
+
+    public static <T> T getRandomElement(List<T> list) {
+        if (list == null || list.isEmpty()) {
+            return null;
+        }
+        Random random = new Random();
+        int index = random.nextInt(list.size());
+        return list.get(index);
     }
 }

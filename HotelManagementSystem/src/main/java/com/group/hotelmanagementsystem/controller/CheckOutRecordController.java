@@ -1,5 +1,6 @@
 package com.group.hotelmanagementsystem.controller;
 
+import com.group.hotelmanagementsystem.entity.CheckInRecord;
 import com.group.hotelmanagementsystem.entity.CheckOutRecord;
 import com.group.hotelmanagementsystem.entity.Room;
 import com.group.hotelmanagementsystem.service.CheckOutRecordService;
@@ -26,15 +27,18 @@ public class CheckOutRecordController {
     @RequestMapping(value = "/deleteByPrimaryKey")
     public String deleteByPrimaryKey(@RequestParam("CheckOutRecordID") Integer checkOutRecordID) {
         try {
+            // update room status
+            CheckOutRecord checkOutRecord = checkOutRecordService.selectByPrimaryKey(checkOutRecordID);
+            Room room = new Room();
+            room.setRoomID(checkOutRecord.getRoomID());
+            room.setRoomStatusID(1);
+            roomService.updateByPrimaryKeySelective(room);
+            log.info("Delete - room update success");
+            // Delete
             checkOutRecordService.deleteByPrimaryKey(checkOutRecordID);
             log.info("Delete checkOutRecordID: {}, success.", checkOutRecordID);
             checkOutRecordService.alterTable();
             log.info("Alter table CheckOutRecord increment success.");
-            // update room status
-            Room room = new Room();
-            room.setRoomStatusID(1);
-            roomService.updateByPrimaryKeySelective(room);
-            log.info("Delete - room update success");
             return "Delete checkOutRecordID: " + checkOutRecordID + " success.";
         } catch (Exception e) {
             log.info("Delete CheckOutRecord or Alter Table failed.");

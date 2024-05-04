@@ -35,6 +35,18 @@
     where roomID = #{roomID,jdbcType=INTEGER}
 
   </select>
+  <select id="selectByRoomTypeID" parameterType="java.lang.Integer" resultMap="BaseResultMap" >
+    select
+    <include refid="All_Column_List" />
+    from Room
+    where roomTypeID = #{roomTypeID,jdbcType=INTEGER} and roomStatusID = 1
+  </select>
+  <select id="selectByRoomStatusIDAndRoomTypeID" parameterType="com.group.hotelmanagementsystem.entity.Room" resultMap="BaseResultMap" >
+    select
+    <include refid="All_Column_List" />
+    from Room
+    where roomStatusID = #{roomStatusID,jdbcType=INTEGER} and roomTypeID = #{roomTypeID,jdbcType=INTEGER}
+  </select>
   <select id="selectAll" resultMap="RelationResultMap">
     select
     <include refid="All_Column_List" />

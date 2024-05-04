@@ -21,7 +21,7 @@
     select
     <include refid="Base_Column_List" />
     from Customer
-    where customerName = #{customerName,jdbcType=VARCHAR} and IDNumber = #{IDNumber,jdbcType=VARCHAR}
+    where IDNumber = #{IDNumber,jdbcType=VARCHAR}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
     select *

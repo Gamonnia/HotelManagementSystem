@@ -13,6 +13,10 @@ public interface RoomService {
 
     Room selectByPrimaryKey(Integer roomID);
 
+    List<Room> selectByRoomByTypeID(Integer roomYTypeID);
+
+    List<Room> selectByRoomStatusIDAndRoomTypeID(Room room);
+
     int updateByPrimaryKeySelective(Room record);
 
     int updateByPrimaryKey(Room record);

@@ -20,6 +20,12 @@
     from ReservationRecord
     where reservationRecordID = #{reservationRecordID,jdbcType=INTEGER}
   </select>
+  <select id="selectByCustomerName" parameterType="java.lang.String"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from ReservationRecord
+    where customerName = #{customerName,jdbcType=VARCHAR}
+  </select>
   <select id="selectAll" resultMap="BaseResultMap">
     select *
     from ReservationRecord

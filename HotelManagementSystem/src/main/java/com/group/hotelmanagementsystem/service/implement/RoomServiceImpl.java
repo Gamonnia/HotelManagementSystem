@@ -35,6 +35,16 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
+    public List<Room> selectByRoomByTypeID(Integer roomYTypeID) {
+        return roomMapper.selectByRoomTypeID(roomYTypeID);
+    }
+
+    @Override
+    public List<Room> selectByRoomStatusIDAndRoomTypeID(Room room) {
+        return roomMapper.selectByRoomStatusIDAndRoomTypeID(room);
+    }
+
+    @Override
     public int updateByPrimaryKeySelective(Room record) {
         return roomMapper.updateByPrimaryKeySelective(record);
     }
