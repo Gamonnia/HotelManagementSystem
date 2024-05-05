@@ -10,14 +10,28 @@
     <result column="staffID" jdbcType="INTEGER" property="staffID" />
     <result column="recordTime" jdbcType="TIMESTAMP" property="recordTime" />
   </resultMap>
+  <resultMap id="RelationResultMap" type="com.group.hotelmanagementsystem.entity.ReservationRecord" extends="BaseResultMap">
+    <association column="roomTypeID" javaType="com.group.hotelmanagementsystem.entity.RoomType" property="roomType" >
+      <id column="roomTypeID" jdbcType="INTEGER" property="roomTypeID" />
+      <result column="roomTypeName" jdbcType="VARCHAR" property="roomTypeName" />
+      <result column="roomPrice" jdbcType="DECIMAL" property="roomPrice" />
+      <result column="roomDeposit" jdbcType="DECIMAL" property="roomDeposit" />
+      <result column="roomSize" jdbcType="DECIMAL" property="roomSize" />
+    </association>
+  </resultMap>
+
   <sql id="Base_Column_List">
     reservationRecordID, customerName, customerPhone, roomTypeID, expectedCheckIn, staffID, 
     recordTime
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <sql id="All_Column_List">
+    *
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="RelationResultMap">
     select 
-    <include refid="Base_Column_List" />
-    from ReservationRecord
+    <include refid="All_Column_List" />
+    from ReservationRecord r
+    inner join RoomType rt on r.roomTypeID = rt.roomTypeID
     where reservationRecordID = #{reservationRecordID,jdbcType=INTEGER}
   </select>
   <select id="selectByCustomerName" parameterType="java.lang.String"  resultMap="BaseResultMap">
@@ -26,9 +40,11 @@
     from ReservationRecord
     where customerName = #{customerName,jdbcType=VARCHAR}
   </select>
-  <select id="selectAll" resultMap="BaseResultMap">
-    select *
-    from ReservationRecord
+  <select id="selectAll" resultMap="RelationResultMap">
+    select
+    <include refid="All_Column_List" />
+    from ReservationRecord r
+    inner join RoomType rt on r.roomTypeID = rt.roomTypeID
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from ReservationRecord

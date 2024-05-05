@@ -27,6 +27,9 @@ public class ReservationRecord implements Serializable {
 
     private Date recordTime;
 
+    private RoomType roomType;
+
+
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -97,5 +100,15 @@ public class ReservationRecord implements Serializable {
     @JsonProperty(value = "recordTime")
     public void setRecordTime(Date recordTime) {
         this.recordTime = recordTime;
+    }
+
+    @JsonProperty(value = "roomType")
+    public RoomType getRoomType() {
+        return roomType;
+    }
+
+    @JsonProperty(value = "roomType")
+    public void setRoomType(RoomType roomType) {
+        this.roomType = roomType;
     }
 }
