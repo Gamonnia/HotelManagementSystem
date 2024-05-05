@@ -3,7 +3,7 @@
 <mapper namespace="com.group.hotelmanagementsystem.mapper.FinancialRecordMapper">
   <resultMap id="BaseResultMap" type="com.group.hotelmanagementsystem.entity.FinancialRecord">
     <id column="financialRecordID" jdbcType="INTEGER" property="financialRecordID" />
-    <result column="incomeOrExpense" jdbcType="VARCHAR" property="IncomeOrExpense" />
+    <result column="incomeOrExpense" jdbcType="VARCHAR" property="incomeOrExpense" />
     <result column="amount" jdbcType="DECIMAL" property="amount" />
     <result column="date" jdbcType="TIMESTAMP" property="date" />
   </resultMap>
