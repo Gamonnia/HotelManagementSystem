@@ -46,13 +46,13 @@ public class StaffController {
             staffService.insert(record);
             log.info("Insert staff success.");
 
-            log.info("Create Admin Account.......");
+            log.info("Insert - Create Admin Account.......");
             Admin admin = new Admin();
             // default AdminAccount & Password
             admin.setAdminAccount(record.getStaffID());
             admin.setAdminPassword(record.getStaffID().toString());
             adminService.insert(admin);
-            log.info("Create Admin Account success.");
+            log.info("Insert - Create Admin Account success.");
 
             return staffService.selectByPrimaryKey(record.getStaffID());
         } catch (Exception e) {
@@ -68,6 +68,15 @@ public class StaffController {
         try {
             staffService.insertSelective(record);
             log.info("InsertSelective staff success.");
+
+            log.info("InsertSelective - Create Admin Account.......");
+            Admin admin = new Admin();
+            // default AdminAccount & Password
+            admin.setAdminAccount(record.getStaffID());
+            admin.setAdminPassword(record.getStaffID().toString());
+            adminService.insert(admin);
+            log.info("InsertSelective - Create Admin Account success.");
+
             return staffService.selectByPrimaryKey(record.getStaffID());
         } catch (Exception e) {
             log.info("InsertSelective staff failed.");

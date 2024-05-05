@@ -14,6 +14,8 @@ public interface DepartmentService {
 
     Department selectByPrimaryKey(Integer departmentID);
 
+    Department selectByDepartmentName(String departmentName);
+
     int updateByPrimaryKeySelective(Department record);
 
     int updateByPrimaryKey(Department record);

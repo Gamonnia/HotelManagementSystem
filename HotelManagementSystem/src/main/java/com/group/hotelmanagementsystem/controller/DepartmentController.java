@@ -35,6 +35,10 @@ public class DepartmentController {
     @RequestMapping(value = "/insert")
     public Department insert(@RequestBody Department record) {
         try {
+            if (departmentService.selectByDepartmentName(record.getDepartmentName()) != null) {
+                log.info("Insert - Department already exist.");
+                return null;
+            }
             departmentService.insert(record);
             log.info("Insert Department success.");
             return departmentService.selectByPrimaryKey(record.getDepartmentID());
@@ -49,6 +53,10 @@ public class DepartmentController {
     @RequestMapping(value = "/insertSelective")
     public Department insertSelective(@RequestBody Department record) {
         try {
+            if (departmentService.selectByDepartmentName(record.getDepartmentName()) != null) {
+                log.info("InsertSelective - Department already exist.");
+                return null;
+            }
             departmentService.insertSelective(record);
             log.info("InsertSelective Department success.");
             return departmentService.selectByPrimaryKey(record.getDepartmentID());

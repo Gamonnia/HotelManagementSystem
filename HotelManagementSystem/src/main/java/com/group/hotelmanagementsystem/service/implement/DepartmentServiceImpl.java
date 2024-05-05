@@ -34,6 +34,11 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
+    public Department selectByDepartmentName(String departmentName) {
+        return departmentMapper.selectByDepartmentName(departmentName);
+    }
+
+    @Override
     public int updateByPrimaryKeySelective(Department record) {
         return departmentMapper.updateByPrimaryKeySelective(record);
     }
