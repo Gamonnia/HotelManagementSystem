@@ -36,6 +36,10 @@ public class RoomStatusController {
     @RequestMapping(value = "/insert")
     public RoomStatus insert(@RequestBody RoomStatus record) {
         try {
+            if (roomStatusService.selectByRoomStatusName(record.getRoomStatusName()) != null) {
+                log.info("Insert - RoomStatus already exists.");
+                return null;
+            }
             roomStatusService.insert(record);
             log.info("Insert roomStatus success.");
             return roomStatusService.selectByPrimaryKey(record.getRoomStatusID());
@@ -50,6 +54,10 @@ public class RoomStatusController {
     @RequestMapping(value = "/insertSelective")
     public RoomStatus insertSelective(@RequestBody RoomStatus record) {
         try {
+            if (roomStatusService.selectByRoomStatusName(record.getRoomStatusName()) != null) {
+                log.info("InsertSelective - RoomStatus already exists.");
+                return null;
+            }
             roomStatusService.insertSelective(record);
             log.info("InsertSelective roomStatus success.");
             return roomStatusService.selectByPrimaryKey(record.getRoomStatusID());

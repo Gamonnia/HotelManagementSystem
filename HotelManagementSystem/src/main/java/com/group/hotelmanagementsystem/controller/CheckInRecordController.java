@@ -193,6 +193,11 @@ public class CheckInRecordController {
             // verify Reservation Record
             ReservationRecord reservationRecord = reservationRecordService.selectByCustomerName(param.getCustomer().getCustomerName());
             Room room = roomService.selectByPrimaryKey(param.getCheckInRecord().getRoomID());
+
+            // check the room status
+            if (room.getRoomStatusID() == 3) {
+                return false;
+            }
             if (reservationRecord != null) {
                 // update room status
                 Room reservedRoom = new Room();

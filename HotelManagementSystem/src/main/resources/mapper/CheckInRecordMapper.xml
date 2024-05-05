@@ -21,6 +21,15 @@
       <result column="IDNumber" jdbcType="VARCHAR" property="IDNumber" />
       <result column="phoneNumber" jdbcType="VARCHAR" property="phoneNumber" />
     </association>
+    <association column="roomID" javaType="com.group.hotelmanagementsystem.entity.Room" property="room">
+      <id column="roomID" jdbcType="INTEGER" property="roomID" />
+      <result column="roomTypeID" jdbcType="INTEGER" property="roomTypeID" />
+      <result column="roomStatusID" jdbcType="INTEGER" property="roomStatusID" />
+    </association>
+    <association column="roomStatusID" javaType="com.group.hotelmanagementsystem.entity.RoomStatus" property="roomStatus" >
+      <id column="roomStatusID" jdbcType="INTEGER" property="roomStatusID" />
+      <result column="roomStatusName" jdbcType="VARCHAR" property="roomStatusName" />
+    </association>
   </resultMap>
 
 
@@ -43,6 +52,8 @@
     <include refid="All_Column_List" />
     from CheckInRecord chr
     inner join Customer c on chr.customerID = c.customerID
+    inner join Room r on chr.roomID = r.roomID
+    inner join RoomStatus rs on r.roomStatusID = rs.roomStatusID
     where checkInRecordID = #{checkInRecordID,jdbcType=INTEGER}
   </select>
   <select id="selectAll" resultMap="RelationResultMap">
@@ -50,6 +61,8 @@
     <include refid="All_Column_List" />
     from CheckInRecord chr
     inner join Customer c on chr.customerID = c.customerID
+    inner join Room r on chr.roomID = r.roomID
+    inner join RoomStatus rs on r.roomStatusID = rs.roomStatusID
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from CheckInRecord

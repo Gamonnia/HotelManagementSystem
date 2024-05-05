@@ -17,6 +17,12 @@
     from RoomType
     where roomTypeID = #{roomTypeID,jdbcType=INTEGER}
   </select>
+  <select id="selectByRoomTypeName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from RoomType
+    where roomTypeName = #{roomTypeName,jdbcType=VARCHAR}
+  </select>
   <select id="selectAll" resultMap="BaseResultMap">
     select *
     from RoomType

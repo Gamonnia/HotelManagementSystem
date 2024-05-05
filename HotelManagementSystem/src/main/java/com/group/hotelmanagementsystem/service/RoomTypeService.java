@@ -13,6 +13,8 @@ public interface RoomTypeService {
 
     RoomType selectByPrimaryKey(Integer roomTypeID);
 
+    RoomType selectByRoomTypeName(String roomTypeName);
+
     int updateByPrimaryKeySelective(RoomType record);
 
     int updateByPrimaryKey(RoomType record);

@@ -13,6 +13,8 @@ public interface RoomStatusService {
 
     RoomStatus selectByPrimaryKey(Integer roomStatusID);
 
+    RoomStatus selectByRoomStatusName(String roomStatusName);
+
     int updateByPrimaryKeySelective(RoomStatus record);
 
     int updateByPrimaryKey(RoomStatus record);

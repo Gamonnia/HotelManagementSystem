@@ -36,6 +36,10 @@ public class CheckInRecord implements Serializable {
 
     private Customer customer;
 
+    private Room room;
+
+    private RoomStatus roomStatus;
+
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -137,5 +141,25 @@ public class CheckInRecord implements Serializable {
     @JsonProperty(value = "customer")
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    @JsonProperty(value = "room")
+    public Room getRoom() {
+        return room;
+    }
+
+    @JsonProperty(value = "room")
+    public void setRoom(Room room) {
+        this.room = room;
+    }
+
+    @JsonProperty(value = "roomStatus")
+    public RoomStatus getRoomStatus() {
+        return roomStatus;
+    }
+
+    @JsonProperty(value = "roomStatus")
+    public void setRoomStatus(RoomStatus roomStatus) {
+        this.roomStatus = roomStatus;
     }
 }

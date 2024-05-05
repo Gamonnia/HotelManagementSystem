@@ -35,6 +35,11 @@ public class RoomStatusServiceImpl implements RoomStatusService {
     }
 
     @Override
+    public RoomStatus selectByRoomStatusName(String roomStatusName) {
+        return roomStatusMapper.selectByRoomStatusName(roomStatusName);
+    }
+
+    @Override
     public int updateByPrimaryKeySelective(RoomStatus record) {
         return roomStatusMapper.updateByPrimaryKeySelective(record);
     }

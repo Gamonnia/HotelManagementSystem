@@ -35,6 +35,11 @@ public class RoomTypeServiceImpl implements RoomTypeService {
     }
 
     @Override
+    public RoomType selectByRoomTypeName(String roomTypeName) {
+        return roomTypeMapper.selectByRoomTypeName(roomTypeName);
+    }
+
+    @Override
     public int updateByPrimaryKeySelective(RoomType record) {
         return roomTypeMapper.updateByPrimaryKeySelective(record);
     }

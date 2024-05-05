@@ -36,6 +36,10 @@ public class RoomController {
     @RequestMapping(value = "/insert")
     public Room insert(@RequestBody Room record) {
         try {
+            if (roomService.selectByPrimaryKey(record.getRoomID()) != null) {
+                log.info("Insert - Room already exist.");
+                return null;
+            }
             roomService.insert(record);
             log.info("Insert room success.");
             return roomService.selectByPrimaryKey(record.getRoomID());
@@ -50,6 +54,10 @@ public class RoomController {
     @RequestMapping(value = "/insertSelective")
     public Room insertSelective(@RequestBody Room record) {
         try {
+            if (roomService.selectByPrimaryKey(record.getRoomID()) != null) {
+                log.info("InsertSelective - Room already exist.");
+                return null;
+            }
             roomService.insertSelective(record);
             log.info("InsertSelective room success.");
             return roomService.selectByPrimaryKey(record.getRoomID());
