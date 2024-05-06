@@ -19,17 +19,17 @@ public class CustomerController {
     private CustomerService customerService;
 
     @RequestMapping("/deleteByPrimaryKey")
-    public String deleteByPrimaryKey(@RequestParam("customerID") Integer customerID) {
+    public boolean deleteByPrimaryKey(@RequestParam("customerID") Integer customerID) {
         try {
             customerService.deleteByPrimaryKey(customerID);
             log.info("Delete customerID: {}, success.", customerID);
             customerService.alterTable();
             log.info("Alter table Customer increment success.");
-            return "Delete customerID: " + customerID + " success.";
+            return true;
         } catch (Exception e) {
             log.info("Delete Customer or Alter Table failed.");
             log.error(e.getMessage());
-            return "Delete customerID: " + customerID + " failed.";
+            return false;
         }
     }
 

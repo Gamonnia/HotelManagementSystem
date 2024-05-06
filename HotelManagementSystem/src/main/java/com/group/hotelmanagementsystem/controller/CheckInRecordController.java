@@ -37,7 +37,7 @@ public class CheckInRecordController {
     private ReservationRecordService reservationRecordService;
 
     @RequestMapping(value = "/deleteByPrimaryKey")
-    public String deleteByPrimaryKey(@RequestParam("checkInRecordID") Integer checkInRecordID) {
+    public boolean deleteByPrimaryKey(@RequestParam("checkInRecordID") Integer checkInRecordID) {
         try {
             // update room status
             CheckInRecord checkInRecord = checkInRecordService.selectByPrimaryKey(checkInRecordID);
@@ -51,11 +51,11 @@ public class CheckInRecordController {
             log.info("Delete checkInRecordID: {}, success.", checkInRecordID);
             checkInRecordService.alterTable();
             log.info("Alter table CheckInRecord increment success.");
-            return "Delete checkInRecordID: " + checkInRecordID + " success.";
+            return true;
         } catch (Exception e) {
             log.info("Delete CheckInRecord or Alter Table failed.");
             log.error(e.getMessage());
-            return "Delete checkInRecordID: " + checkInRecordID + " failed.";
+            return false;
         }
     }
 

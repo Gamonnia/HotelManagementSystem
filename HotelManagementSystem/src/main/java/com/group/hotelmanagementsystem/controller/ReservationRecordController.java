@@ -25,7 +25,7 @@ public class ReservationRecordController {
     private RoomService roomService;
 
     @RequestMapping(value = "/deleteByPrimaryKey")
-    public String deleteByPrimaryKey(@RequestParam("reservationID") Integer reservationRecordID) {
+    public boolean deleteByPrimaryKey(@RequestParam("reservationID") Integer reservationRecordID) {
         try {
             // update room status
             ReservationRecord reservationRecord = reservationRecordService.selectByPrimaryKey(reservationRecordID);
@@ -44,11 +44,11 @@ public class ReservationRecordController {
             log.info("Delete reservationID: {}, success.", reservationRecordID);
             reservationRecordService.alterTable();
             log.info("Alter table ReservationRecord increment success.");
-            return "Delete reservationID: " + reservationRecordID + " success.";
+            return true;
         } catch (Exception e) {
             log.info("Delete ReservationRecord or Alter Table failed.");
             log.error(e.getMessage());
-            return "Delete reservationID: " + reservationRecordID + " failed.";
+            return false;
         }
     }
 

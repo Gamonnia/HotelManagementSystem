@@ -18,17 +18,17 @@ public class HotelPropertyController {
     private HotelPropertyService hotelPropertyService;
 
     @RequestMapping("/deleteByPrimaryKey")
-    public String deleteByPrimaryKey(@RequestParam("itemID") Integer itemID) {
+    public boolean deleteByPrimaryKey(@RequestParam("itemID") Integer itemID) {
         try {
             hotelPropertyService.deleteByPrimaryKey(itemID);
             log.info("Delete itemID: {}, success.", itemID);
             hotelPropertyService.alterTable();
             log.info("Alter table HotelProperty increment success.");
-            return "Delete itemID: " + itemID + " success.";
+            return true;
         } catch (Exception e) {
             log.info("Delete HotelProperty or Alter Table failed.");
             log.error(e.getMessage());
-            return "Delete itemID: " + itemID + " failed.";
+            return false;
         }
     }
 

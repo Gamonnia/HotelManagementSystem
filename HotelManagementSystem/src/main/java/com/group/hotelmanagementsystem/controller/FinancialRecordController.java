@@ -18,17 +18,17 @@ public class FinancialRecordController {
     private FinancialRecordService financialRecordService;
 
     @RequestMapping("/deleteByPrimaryKey")
-    public String deleteByPrimaryKey(@RequestParam("financialRecordID") Integer financialRecordID) {
+    public boolean deleteByPrimaryKey(@RequestParam("financialRecordID") Integer financialRecordID) {
         try {
             financialRecordService.deleteByPrimaryKey(financialRecordID);
             log.info("Delete financialID: {}, success.", financialRecordID);
             financialRecordService.alterTable();
             log.info("Alter table FinancialRecord increment success.");
-            return "Delete financialID: " + financialRecordID + " success.";
+            return true;
         } catch (Exception e) {
             log.info("Delete FinancialRecord or Alter table failed.");
             log.error(e.getMessage());
-            return "Delete financialID: " + financialRecordID + " failed.";
+            return false;
         }
     }
 

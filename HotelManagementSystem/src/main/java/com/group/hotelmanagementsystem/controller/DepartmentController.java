@@ -17,17 +17,17 @@ public class DepartmentController {
     private DepartmentService departmentService;
 
     @RequestMapping(value = "/deleteByPrimaryKey")
-    public String deleteByPrimaryKey(@RequestParam("departmentID") Integer departmentID) {
+    public boolean deleteByPrimaryKey(@RequestParam("departmentID") Integer departmentID) {
         try {
             departmentService.deleteByPrimaryKey(departmentID);
             log.info("Delete departmentID: {}, success.", departmentID);
             departmentService.alterTable();
             log.info("Alter table Department increment success.");
-            return "Delete departmentID: " + departmentID + " success.";
+            return true;
         } catch (Exception e) {
             log.info("Delete Department or Alter table failed.");
             log.error(e.getMessage());
-            return "Delete departmentID: " + departmentID + " failed.";
+            return false;
         }
     }
 

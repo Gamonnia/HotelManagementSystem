@@ -18,17 +18,17 @@ public class RoomController {
     private RoomService roomService;
 
     @RequestMapping(value = "/deleteByPrimaryKey")
-    public String deleteByPrimaryKey(@RequestParam("roomID") Integer roomID) {
+    public Boolean deleteByPrimaryKey(@RequestParam("roomID") Integer roomID) {
         try {
            roomService.deleteByPrimaryKey(roomID);
             log.info("Delete roomID: {}, success.", roomID);
             roomService.alterTable();
             log.info("Alter table Room increment success.");
-            return "Delete roomID: " + roomID + " success.";
+            return true;
         } catch (Exception e) {
             log.info("Delete Room or Alter Table failed.");
             log.error(e.getMessage());
-            return "Delete roomID: " + roomID + " failed.";
+            return false;
         }
     }
 
