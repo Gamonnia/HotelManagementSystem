@@ -55,6 +55,7 @@ public class CheckOutRecordController {
             log.info("Insert checkOutRecord success.");
             // update room status
             Room room = new Room();
+            room.setRoomID(record.getRoomID());
             room.setRoomStatusID(1);
             roomService.updateByPrimaryKeySelective(room);
             log.info("Insert - Room update success");
@@ -74,6 +75,7 @@ public class CheckOutRecordController {
             log.info("InsertSelective checkOutRecord success.");
             // update room status
             Room room = new Room();
+            room.setRoomID(record.getRoomID());
             room.setRoomStatusID(1);
             roomService.updateByPrimaryKeySelective(room);
             log.info("InsertSelective - room update success");
