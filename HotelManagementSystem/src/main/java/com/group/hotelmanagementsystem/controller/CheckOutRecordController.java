@@ -1,9 +1,8 @@
 package com.group.hotelmanagementsystem.controller;
 
-import com.group.hotelmanagementsystem.entity.CheckInRecord;
-import com.group.hotelmanagementsystem.entity.CheckOutRecord;
-import com.group.hotelmanagementsystem.entity.Room;
+import com.group.hotelmanagementsystem.entity.*;
 import com.group.hotelmanagementsystem.service.CheckOutRecordService;
+import com.group.hotelmanagementsystem.service.FinancialRecordService;
 import com.group.hotelmanagementsystem.service.RoomService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +23,11 @@ public class CheckOutRecordController {
     @Autowired
     private RoomService roomService;
 
+    @Autowired
+    private FinancialRecordService financialRecordService;
+
     @RequestMapping(value = "/deleteByPrimaryKey")
-    public boolean deleteByPrimaryKey(@RequestParam("CheckOutRecordID") Integer checkOutRecordID) {
+    public boolean deleteByPrimaryKey(@RequestParam("checkOutRecordID") Integer checkOutRecordID) {
         try {
             // update room status
             CheckOutRecord checkOutRecord = checkOutRecordService.selectByPrimaryKey(checkOutRecordID);
@@ -54,11 +56,13 @@ public class CheckOutRecordController {
             checkOutRecordService.insert(record);
             log.info("Insert checkOutRecord success.");
             // update room status
-            Room room = new Room();
-            room.setRoomID(record.getRoomID());
+            Room room = roomService.selectByPrimaryKey(record.getRoomID());
             room.setRoomStatusID(1);
             roomService.updateByPrimaryKeySelective(room);
             log.info("Insert - Room update success");
+            // insert a new financial record
+            insertFinancialRecord(record, room);
+
             return checkOutRecordService.selectByPrimaryKey(record.getCheckOutRecordID());
         } catch (Exception e) {
             log.info("Insert checkOutRecord failed.");
@@ -74,11 +78,13 @@ public class CheckOutRecordController {
             checkOutRecordService.insertSelective(record);
             log.info("InsertSelective checkOutRecord success.");
             // update room status
-            Room room = new Room();
-            room.setRoomID(record.getRoomID());
+            Room room = roomService.selectByPrimaryKey(record.getRoomID());
             room.setRoomStatusID(1);
             roomService.updateByPrimaryKeySelective(room);
             log.info("InsertSelective - room update success");
+            // insert a new financial record
+            insertFinancialRecord(record, room);
+
             return checkOutRecordService.selectByPrimaryKey(record.getCheckOutRecordID());
         } catch (Exception e) {
             log.info("InsertSelective checkOutRecord failed.");
@@ -139,5 +145,17 @@ public class CheckOutRecordController {
             log.error(e.getMessage());
             return null;
         }
+    }
+
+
+    private void insertFinancialRecord(@RequestBody CheckOutRecord record, Room room) {
+        log.info("Insert a new Financial record....");
+        FinancialRecord financialRecord = new FinancialRecord();
+        RoomType roomType = room.getRoomType();
+        financialRecord.setAmount(roomType.getRoomPrice());
+        financialRecord.setDate(record.getRecordTime());
+        financialRecord.setIncomeOrExpense("Room Revenue");
+        financialRecordService.insert(financialRecord);
+        log.info("Insert - Financial record success");
     }
 }

@@ -31,8 +31,8 @@
     select 
     <include refid="All_Column_List" />
     from CheckOutRecord chr
+    inner join Customer c on chr.customerID = c.customerID
     where checkOutRecordID = #{checkOutRecordID,jdbcType=INTEGER}
-    inner join Customer c on chr.customerID = c.customerID;
   </select>
   <select id="selectAll" resultMap="RelationResultMap">
     select
