@@ -11,6 +11,7 @@
     <result column="paymentAmount" jdbcType="DECIMAL" property="paymentAmount" />
     <result column="staffID" jdbcType="INTEGER" property="staffID" />
     <result column="recordTime" jdbcType="TIMESTAMP" property="recordTime" />
+    <result column="checkOutOrNot"  jdbcType="TINYINT" property="checkOutOrNot" />
   </resultMap>
 
   <resultMap id="RelationResultMap" type="com.group.hotelmanagementsystem.entity.CheckInRecord" extends="BaseResultMap">
@@ -35,7 +36,7 @@
 
   <sql id="Base_Column_List">
     checkInRecordID, customerID, roomID, checkInTime, expectedCheckOut, deposit, paymentAmount,
-    staffID, recordTime
+    staffID, recordTime, checkOutOrNot
   </sql>
 
   <!--<sql id="All_Column_List">-->
@@ -56,6 +57,13 @@
     inner join RoomStatus rs on r.roomStatusID = rs.roomStatusID
     where checkInRecordID = #{checkInRecordID,jdbcType=INTEGER}
   </select>
+  <select id="selectByCustomerIsCheckOut" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="All_Column_List" />
+    from CheckInRecord
+    where customerID = #{customerID,jdbcType=INTEGER} and checkOutOrNot = 0
+  </select>
+
   <select id="selectAll" resultMap="RelationResultMap">
     select
     <include refid="All_Column_List" />
@@ -74,10 +82,10 @@
   <insert id="insert" keyColumn="checkInRecordID" keyProperty="checkInRecordID" parameterType="com.group.hotelmanagementsystem.entity.CheckInRecord" useGeneratedKeys="true">
     insert into CheckInRecord (customerID, roomID, checkInTime,
       expectedCheckOut, deposit, paymentAmount, 
-      staffID, recordTime)
+      staffID, recordTime, checkOutOrNot)
     values (#{customerID,jdbcType=INTEGER}, #{roomID,jdbcType=INTEGER}, #{checkInTime,jdbcType=TIMESTAMP},
       #{expectedCheckOut,jdbcType=TIMESTAMP}, #{deposit,jdbcType=DECIMAL}, #{paymentAmount,jdbcType=DECIMAL}, 
-      #{staffID,jdbcType=INTEGER}, #{recordTime,jdbcType=TIMESTAMP})
+      #{staffID,jdbcType=INTEGER}, #{recordTime,jdbcType=TIMESTAMP}, #{checkOutOrNot,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" keyColumn="checkInRecordID" keyProperty="checkInRecordID" parameterType="com.group.hotelmanagementsystem.entity.CheckInRecord" useGeneratedKeys="true">
     insert into CheckInRecord
@@ -106,6 +114,9 @@
       <if test="recordTime != null">
         recordTime,
       </if>
+      <if test="checkOutOrNot != null">
+        checkOutOrNot,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="customerID != null">
@@ -131,6 +142,9 @@
       </if>
       <if test="recordTime != null">
         #{recordTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="checkOutOrNot != null">
+        #{checkOutOrNot,jdbcType=TINYINT},
       </if>
     </trim>
   </insert>
@@ -161,6 +175,9 @@
       <if test="recordTime != null">
         recordTime = #{recordTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="checkOutOrNot != null">
+        checkOutOrNot = #{checkOutOrNot,jdbcType=TINYINT},
+      </if>
     </set>
     where checkInRecordID = #{checkInRecordID,jdbcType=INTEGER}
   </update>
@@ -173,7 +190,8 @@
       deposit = #{deposit,jdbcType=DECIMAL},
       paymentAmount = #{paymentAmount,jdbcType=DECIMAL},
       staffID = #{staffID,jdbcType=INTEGER},
-      recordTime = #{recordTime,jdbcType=TIMESTAMP}
+      recordTime = #{recordTime,jdbcType=TIMESTAMP},
+      checkOutOrNot = #{checkOutOrNot,jdbcType=TINYINT}
     where checkInRecordID = #{checkInRecordID,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -36,6 +36,11 @@ public class CheckInRecordServiceImpl implements CheckInRecordService {
     }
 
     @Override
+    public CheckInRecord selectByCustomerIsCheckOut(Integer customerID) {
+        return checkInRecordMapper.selectByCustomerIsCheckOut(customerID);
+    }
+
+    @Override
     public List<CheckInRecord> selectAll() {
         return checkInRecordMapper.selectAll();
     }

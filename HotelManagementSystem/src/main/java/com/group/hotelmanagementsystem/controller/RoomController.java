@@ -20,7 +20,7 @@ public class RoomController {
     @RequestMapping(value = "/deleteByPrimaryKey")
     public Boolean deleteByPrimaryKey(@RequestParam("roomID") Integer roomID) {
         try {
-           roomService.deleteByPrimaryKey(roomID);
+            roomService.deleteByPrimaryKey(roomID);
             log.info("Delete roomID: {}, success.", roomID);
             roomService.alterTable();
             log.info("Alter table Room increment success.");

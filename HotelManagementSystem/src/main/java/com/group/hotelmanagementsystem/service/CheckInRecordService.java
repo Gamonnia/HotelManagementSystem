@@ -14,6 +14,8 @@ public interface CheckInRecordService {
 
     CheckInRecord selectByPrimaryKey(Integer checkInRecordID);
 
+    CheckInRecord selectByCustomerIsCheckOut(Integer customerID);
+
     List<CheckInRecord> selectAll();
 
     int updateByPrimaryKeySelective(CheckInRecord record);

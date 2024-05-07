@@ -16,6 +16,8 @@ public interface CheckInRecordMapper {
 
     CheckInRecord selectByPrimaryKey(Integer checkInRecordID);
 
+    CheckInRecord selectByCustomerIsCheckOut(Integer customerID);
+
     int updateByPrimaryKeySelective(CheckInRecord record);
 
     int updateByPrimaryKey(CheckInRecord record);

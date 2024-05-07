@@ -34,6 +34,8 @@ public class CheckInRecord implements Serializable {
 
     private Date recordTime;
 
+    private boolean checkOutOrNot = false;
+
     private Customer customer;
 
     private Room room;
@@ -161,5 +163,15 @@ public class CheckInRecord implements Serializable {
     @JsonProperty(value = "roomStatus")
     public void setRoomStatus(RoomStatus roomStatus) {
         this.roomStatus = roomStatus;
+    }
+
+    @JsonProperty(value = "checkOutOrNot")
+    public boolean isCheckOutOrNot() {
+        return checkOutOrNot;
+    }
+
+    @JsonProperty(value = "checkOutOrNot", defaultValue = "false")
+    public void setCheckOutOrNot(boolean checkOutOrNot) {
+        this.checkOutOrNot = checkOutOrNot;
     }
 }

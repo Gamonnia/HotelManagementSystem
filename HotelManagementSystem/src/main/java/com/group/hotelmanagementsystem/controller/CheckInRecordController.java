@@ -68,12 +68,17 @@ public class CheckInRecordController {
             if (customer == null) {
                 customerService.insert(param.getCustomer());
             } else param.setCustomer(customer);
+            param.getCheckInRecord().setCustomerID(param.getCustomer().getCustomerID());
             // update param
             if (updateRoom(param)) {
                 log.info("Insert - Room update success");
             } else log.info("Insert - Room update failed");
+            // verify check out or not
+            if (checkInRecordService.selectByCustomerIsCheckOut(param.getCheckInRecord().getCustomerID()) != null) {
+                log.info("Insert - Room checkInRecord already exist");
+                return null;
+            }
             // insert check in record
-            param.getCheckInRecord().setCustomerID(param.getCustomer().getCustomerID());
             checkInRecordService.insert(param.getCheckInRecord());
             log.info("Insert success");
             return checkInRecordService.selectByPrimaryKey(param.getCheckInRecord().getCheckInRecordID());
@@ -93,12 +98,17 @@ public class CheckInRecordController {
             if (customer == null) {
                 customerService.insertSelective(param.getCustomer());
             } else param.setCustomer(customer);
+            param.getCheckInRecord().setCustomerID(param.getCustomer().getCustomerID());
             // update param
             if (updateRoom(param)) {
                 log.info("InsertSelective - Room update success");
             } else log.info("InsertSelective - Room update failed");
+            // verify check out or not
+            if (checkInRecordService.selectByCustomerIsCheckOut(param.getCheckInRecord().getCustomerID()) != null) {
+                log.info("InsertSelective - Room checkInRecord already exist");
+                return null;
+            }
             // insert check in record
-            param.getCheckInRecord().setCustomerID(param.getCustomer().getCustomerID());
             checkInRecordService.insertSelective(param.getCheckInRecord());
             log.info("InsertSelective success");
             return checkInRecordService.selectByPrimaryKey(param.getCheckInRecord().getCheckInRecordID());
@@ -165,6 +175,24 @@ public class CheckInRecordController {
             return null;
         }
     }
+
+
+    @RequestMapping(value = "/checkOut")
+    public boolean checkOut(@RequestParam("checkInRecordID") Integer checkInRecordID) {
+        try {
+            CheckInRecord checkInRecord = new CheckInRecord();
+            checkInRecord.setCheckInRecordID(checkInRecordID);
+            checkInRecord.setCheckOutOrNot(true);
+            log.info("Check Out checkInRecordID={}, ...", checkInRecordID);
+            return checkInRecordService.updateByPrimaryKeySelective(checkInRecord) >= 1;
+        } catch (Exception e) {
+            log.info("Check Out checkInRecordID={} failed.", checkInRecordID);
+            log.error(e.getMessage());
+            return false;
+        }
+    }
+
+
 
     @Setter
     @Getter
