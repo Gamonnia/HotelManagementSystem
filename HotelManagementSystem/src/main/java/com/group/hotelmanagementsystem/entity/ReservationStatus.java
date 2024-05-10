@@ -3,14 +3,13 @@ package com.group.hotelmanagementsystem.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
 
 /**
  * ReservationStatus
- * @author
+ * @author gamonnia
  */
 @Data
 public class ReservationStatus implements Serializable {

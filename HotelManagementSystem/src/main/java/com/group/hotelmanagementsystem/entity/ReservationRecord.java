@@ -9,7 +9,7 @@ import java.util.Date;
 
 /**
  * ReservationRecord
- * @author 
+ * @author gamonnia
  */
 @Data
 public class ReservationRecord implements Serializable {
