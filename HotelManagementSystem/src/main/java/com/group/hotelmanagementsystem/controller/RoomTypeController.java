@@ -90,7 +90,7 @@ public class RoomTypeController {
         } catch (Exception e) {
             log.info("updateSelective roomTypeID={} failed.", record.getRoomTypeID());
             log.error(e.getMessage());
-            return roomTypeService.selectByPrimaryKey(record.getRoomTypeID());
+            return null;
         }
     }
 
@@ -104,7 +104,7 @@ public class RoomTypeController {
         } catch (Exception e) {
             log.info("update roomTypeID={} failed.", record.getRoomTypeID());
             log.error(e.getMessage());
-            return roomTypeService.selectByPrimaryKey(record.getRoomTypeID());
+            return null;
         }
     }
 

@@ -108,7 +108,7 @@ public class StaffController {
         } catch (Exception e) {
             log.info("updateSelective staffID={} failed.", record.getStaffID());
             log.error(e.getMessage());
-            return staffService.selectByPrimaryKey(record.getStaffID());
+            return null;
         }
     }
 
@@ -122,7 +122,7 @@ public class StaffController {
         } catch (Exception e) {
             log.info("update staffID={} failed.", record.getStaffID());
             log.error(e.getMessage());
-            return staffService.selectByPrimaryKey(record.getStaffID());
+            return null;
         }
     }
 

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.group.hotelmanagementsystem.mapper.ReservationStatusMapper">
+    <resultMap id="BaseResultMap" type="com.group.hotelmanagementsystem.entity.ReservationStatus">
+        <id column="reservationStatusID" jdbcType="INTEGER" property="reservationStatusID" />
+        <result column="reservationStatusName" jdbcType="VARCHAR" property="reservationStatusName" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        reservationStatusID, reservationStatusName
+    </sql>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+        delete from ReservationStatus
+        where reservationStatusID = #{reservationStatusID,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" keyColumn="reservationStatusID" keyProperty="reservationStatusID" parameterType="com.group.hotelmanagementsystem.entity.ReservationStatus" useGeneratedKeys="true" >
+        insert into ReservationStatus (reservationStatusName)
+        values (#{reservationStatusName,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" keyColumn="reservationStatusID" keyProperty="reservationStatusID" parameterType="com.group.hotelmanagementsystem.entity.ReservationStatus" useGeneratedKeys="true" >
+        insert into ReservationRecord
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="reservationStatusName != null">
+                reservationStatusName,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="reservationStatusName != null">
+                #{reservationStatusName,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List" />
+        from reservationStatus
+        where reservationStatusID = #{reservationStatusID,jdbcType=INTEGER}
+    </select>
+    <select id="selectByReservationStatusName" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from reservationStatus
+        where reservationStatusName = #{reservationStatusName,jdbcType=VARCHAR}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select *
+        from reservationStatus
+    </select>
+    <update id="updateByPrimaryKeySelective" parameterType="com.group.hotelmanagementsystem.entity.ReservationStatus" >
+        update ReservationStatus
+        <set>
+            <if test="reservationStatusName != null">
+                reservationStatusName = #{reservationStatusName,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where reservationStatusID = #{reservationStatusID,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.group.hotelmanagementsystem.entity.ReservationStatus" >
+        update ReservationStatus
+        set reservationStatusName = #{reservationStatusName,jdbcType=VARCHAR},
+        where reservationStatusID = #{reservationStatusID,jdbcType=INTEGER}
+    </update>
+    <update id="alterTable">
+        alter table ReservationStatus auto_increment= 1
+    </update>
+</mapper>

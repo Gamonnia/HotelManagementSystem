@@ -28,17 +28,12 @@ public class ReservationRecordController {
     public boolean deleteByPrimaryKey(@RequestParam("reservationID") Integer reservationRecordID) {
         try {
             // update room status
-            ReservationRecord reservationRecord = reservationRecordService.selectByPrimaryKey(reservationRecordID);
-            Room reservedRoom = new Room();
-            reservedRoom.setRoomStatusID(4);
-            reservedRoom.setRoomTypeID(reservationRecord.getRoomTypeID());
-            List<Room> roomList = roomService.selectByRoomStatusIDAndRoomTypeID(reservedRoom);
-            Room room = getRandomElement(roomList);
-            if (room != null) {
-                room.setRoomStatusID(1);
-                roomService.updateByPrimaryKeySelective(room);
+            if (updateRoomToVacant(reservationRecordID)) {
                 log.info("Delete - room update success");
-            } else log.info("Delete - Don't have any available room.);");
+            } else {
+                log.info("Delete - room update failed");
+                return false;
+            }
             // delete
             reservationRecordService.deleteByPrimaryKey(reservationRecordID);
             log.info("Delete reservationID: {}, success.", reservationRecordID);
@@ -51,12 +46,17 @@ public class ReservationRecordController {
             return false;
         }
     }
-
+    
 
     @RequestMapping(value = "/insert")
     public ReservationRecord insert(@RequestBody ReservationRecord record) {
         try {
-            // assign room
+            // verify exist reservation
+            if (reservationRecordService.selectByCustomerName(record.getCustomerName()) != null) {
+                log.info("Insert - the Customer's reservation already exists.");
+                return null;
+            }
+            // allocate room
             List<Room> roomList = roomService.selectByRoomByTypeID(record.getRoomTypeID());
             Room room = getRandomElement(roomList);
             if (room != null) {
@@ -82,6 +82,11 @@ public class ReservationRecordController {
     @RequestMapping(value = "/insertSelective")
     public ReservationRecord insertSelective(@RequestBody ReservationRecord record) {
         try {
+            // verify exist reservation
+            if (reservationRecordService.selectByCustomerName(record.getCustomerName()) != null) {
+                log.info("InsertSelective - the Customer's reservation already exists.");
+                return null;
+            }
             // assign room
             List<Room> roomList = roomService.selectByRoomByTypeID(record.getRoomTypeID());
             Room room = getRandomElement(roomList);
@@ -127,7 +132,7 @@ public class ReservationRecordController {
         } catch (Exception e) {
             log.info("updateSelective reservationRecordID={} failed.", record.getReservationRecordID());
             log.error(e.getMessage());
-            return reservationRecordService.selectByPrimaryKey(record.getReservationRecordID());
+            return null;
         }
     }
 
@@ -141,7 +146,7 @@ public class ReservationRecordController {
         } catch (Exception e) {
             log.info("update reservationRecordID={} failed.", record.getReservationRecordID());
             log.error(e.getMessage());
-            return reservationRecordService.selectByPrimaryKey(record.getReservationRecordID());
+            return null;
         }
     }
 
@@ -159,6 +164,29 @@ public class ReservationRecordController {
     }
 
 
+    @RequestMapping(value = "/cancelReservation")
+    public boolean cancelReservation(@RequestParam("reservationRecordID") Integer reservationRecordID) {
+        try {
+            ReservationRecord reservationRecord = new ReservationRecord();
+            reservationRecord.setReservationRecordID(reservationRecordID);
+            reservationRecord.setReservationStatusID(3);
+            log.info("cancelReservation reservationRecordID: {}", reservationRecordID);
+            reservationRecordService.updateByPrimaryKeySelective(reservationRecord);
+            if (updateRoomToVacant(reservationRecordID)) {
+                log.info("cancelReservation - room update success");
+            } else {
+                log.info("cancelReservation - room update failed");
+                return false;
+            }
+            return true;
+        } catch (Exception e) {
+            log.info("cancelReservation reservationRecordID={} failed.", reservationRecordID);
+            log.error(e.getMessage());
+            return false;
+        }
+    }
+
+
     public static <T> T getRandomElement(List<T> list) {
         if (list == null || list.isEmpty()) {
             return null;
@@ -166,5 +194,23 @@ public class ReservationRecordController {
         Random random = new Random();
         int index = random.nextInt(list.size());
         return list.get(index);
+    }
+
+
+    private boolean updateRoomToVacant(Integer reservationRecordID) {
+
+        ReservationRecord reservationRecord = reservationRecordService.selectByPrimaryKey(reservationRecordID);
+        Room reservedRoom = new Room();
+        reservedRoom.setRoomStatusID(4);
+        reservedRoom.setRoomTypeID(reservationRecord.getRoomTypeID());
+        List<Room> roomList = roomService.selectByRoomStatusIDAndRoomTypeID(reservedRoom);
+        Room room = getRandomElement(roomList);
+        if (room != null) {
+            room.setRoomStatusID(1);
+            roomService.updateByPrimaryKeySelective(room);
+            return true;
+        } else {
+            return false;
+        }
     }
 }

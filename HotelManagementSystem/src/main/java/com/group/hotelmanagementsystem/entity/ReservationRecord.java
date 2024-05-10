@@ -27,8 +27,11 @@ public class ReservationRecord implements Serializable {
 
     private Date recordTime;
 
+    private Integer reservationStatusID = 1;
+
     private RoomType roomType;
 
+    private ReservationStatus reservationStatus;
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -110,5 +113,25 @@ public class ReservationRecord implements Serializable {
     @JsonProperty(value = "roomType")
     public void setRoomType(RoomType roomType) {
         this.roomType = roomType;
+    }
+
+    @JsonProperty(value = "reservationStatusID")
+    public Integer getReservationStatusID() {
+        return reservationStatusID;
+    }
+
+    @JsonProperty(value = "reservationStatusID", defaultValue = "1")
+    public void setReservationStatusID(Integer reservationStatusID) {
+        this.reservationStatusID = reservationStatusID;
+    }
+
+    @JsonProperty(value = "reservationStatus")
+    public ReservationStatus getReservationStatus() {
+        return reservationStatus;
+    }
+
+    @JsonProperty(value = "reservationStatus")
+    public void setReservationStatus(ReservationStatus reservationStatus) {
+        this.reservationStatus = reservationStatus;
     }
 }

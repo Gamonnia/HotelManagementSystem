@@ -90,7 +90,7 @@ public class DepartmentController {
         } catch (Exception e) {
             log.info("updateSelective departmentID={} failed.", record.getDepartmentID());
             log.error(e.getMessage());
-            return departmentService.selectByPrimaryKey(record.getDepartmentID());
+            return null;
         }
     }
 
@@ -104,7 +104,7 @@ public class DepartmentController {
         } catch (Exception e) {
             log.info("update departmentID={} failed.", record.getDepartmentID());
             log.error(e.getMessage());
-            return departmentService.selectByPrimaryKey(record.getDepartmentID());
+            return null;
         }
     }
 

@@ -116,7 +116,7 @@ public class CheckOutRecordController {
         } catch (Exception e) {
             log.info("update checkOutRecordID={} failed.", record.getCheckOutRecordID());
             log.error(e.getMessage());
-            return checkOutRecordService.selectByPrimaryKey(record.getCheckOutRecordID());
+            return null;
         }
     }
 
@@ -130,7 +130,7 @@ public class CheckOutRecordController {
         } catch (Exception e) {
             log.info("updateSelective checkOutRecordID={} failed.", record.getCheckOutRecordID());
             log.error(e.getMessage());
-            return checkOutRecordService.selectByPrimaryKey(record.getCheckOutRecordID());
+            return null;
         }
     }
 
@@ -148,6 +148,11 @@ public class CheckOutRecordController {
     }
 
 
+    /**
+     * insert a new financial record
+     * @param record checkOutRecord
+     * @param room room
+     */
     private void insertFinancialRecord(@RequestBody CheckOutRecord record, Room room) {
         log.info("Insert a new Financial record....");
         FinancialRecord financialRecord = new FinancialRecord();

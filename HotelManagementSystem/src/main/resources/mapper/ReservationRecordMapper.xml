@@ -9,6 +9,7 @@
     <result column="expectedCheckIn" jdbcType="TIMESTAMP" property="expectedCheckIn" />
     <result column="staffID" jdbcType="INTEGER" property="staffID" />
     <result column="recordTime" jdbcType="TIMESTAMP" property="recordTime" />
+    <result column="reservationStatusID" jdbcType="INTEGER" property="reservationStatusID" />
   </resultMap>
   <resultMap id="RelationResultMap" type="com.group.hotelmanagementsystem.entity.ReservationRecord" extends="BaseResultMap">
     <association column="roomTypeID" javaType="com.group.hotelmanagementsystem.entity.RoomType" property="roomType" >
@@ -18,11 +19,15 @@
       <result column="roomDeposit" jdbcType="DECIMAL" property="roomDeposit" />
       <result column="roomSize" jdbcType="DECIMAL" property="roomSize" />
     </association>
+    <association column="reservationStatusID" javaType="com.group.hotelmanagementsystem.entity.ReservationStatus" property="reservationStatus" >
+      <id column="reservationStatusID" jdbcType="INTEGER" property="reservationStatusID" />
+      <result column="reservationStatusName" jdbcType="VARCHAR" property="reservationStatusName" />
+    </association>
   </resultMap>
 
   <sql id="Base_Column_List">
     reservationRecordID, customerName, customerPhone, roomTypeID, expectedCheckIn, staffID, 
-    recordTime
+    recordTime, reservationStatusID
   </sql>
   <sql id="All_Column_List">
     *
@@ -32,19 +37,21 @@
     <include refid="All_Column_List" />
     from ReservationRecord r
     inner join RoomType rt on r.roomTypeID = rt.roomTypeID
+    inner join ReservationStatus rs on r.reservationStatusID = rs.reservationStatusID
     where reservationRecordID = #{reservationRecordID,jdbcType=INTEGER}
   </select>
   <select id="selectByCustomerName" parameterType="java.lang.String"  resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from ReservationRecord
-    where customerName = #{customerName,jdbcType=VARCHAR}
+    where customerName = #{customerName,jdbcType=VARCHAR} and reservationStatusID = 1
   </select>
   <select id="selectAll" resultMap="RelationResultMap">
     select
     <include refid="All_Column_List" />
     from ReservationRecord r
     inner join RoomType rt on r.roomTypeID = rt.roomTypeID
+    inner join ReservationStatus rs on r.reservationStatusID = rs.reservationStatusID
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from ReservationRecord
@@ -55,10 +62,11 @@
   </update>
   <insert id="insert" keyColumn="reservationRecordID" keyProperty="reservationRecordID" parameterType="com.group.hotelmanagementsystem.entity.ReservationRecord" useGeneratedKeys="true">
     insert into ReservationRecord (customerName, customerPhone, roomTypeID, 
-      expectedCheckIn, staffID, recordTime
+      expectedCheckIn, staffID, recordTime, reservationStatusID
       )
     values (#{customerName,jdbcType=VARCHAR}, #{customerPhone,jdbcType=VARCHAR}, #{roomTypeID,jdbcType=INTEGER}, 
-      #{expectedCheckIn,jdbcType=TIMESTAMP}, #{staffID,jdbcType=INTEGER}, #{recordTime,jdbcType=TIMESTAMP}
+      #{expectedCheckIn,jdbcType=TIMESTAMP}, #{staffID,jdbcType=INTEGER}, #{recordTime,jdbcType=TIMESTAMP},
+      #{reservationStatusID,jdbcType=INTEGER}
       )
   </insert>
   <insert id="insertSelective" keyColumn="reservationRecordID" keyProperty="reservationRecordID" parameterType="com.group.hotelmanagementsystem.entity.ReservationRecord" useGeneratedKeys="true">
@@ -82,6 +90,9 @@
       <if test="recordTime != null">
         recordTime,
       </if>
+      <if test="reservationStatusID != null">
+        reservationStatusID,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="customerName != null">
@@ -101,6 +112,9 @@
       </if>
       <if test="recordTime != null">
         #{recordTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reservationStatusID != null">
+        #{reservationStatusID,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -125,6 +139,9 @@
       <if test="recordTime != null">
         recordTime = #{recordTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="reservationStatusID != null">
+        reservationStatusID = #{reservationStatusID,jdbcType=INTEGER},
+      </if>
     </set>
     where reservationRecordID = #{reservationRecordID,jdbcType=INTEGER}
   </update>
@@ -135,7 +152,8 @@
       roomTypeID = #{roomTypeID,jdbcType=INTEGER},
       expectedCheckIn = #{expectedCheckIn,jdbcType=TIMESTAMP},
       staffID = #{staffID,jdbcType=INTEGER},
-      recordTime = #{recordTime,jdbcType=TIMESTAMP}
+      recordTime = #{recordTime,jdbcType=TIMESTAMP},
+      reservationStatusID = #{reservationStatusID,jdbcType=INTEGER}
     where reservationRecordID = #{reservationRecordID,jdbcType=INTEGER}
   </update>
 </mapper>

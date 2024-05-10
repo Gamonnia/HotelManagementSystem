@@ -82,7 +82,7 @@ public class HotelPropertyController {
         } catch (Exception e) {
             log.info("updateSelective itemID={}, failed.", record.getItemID());
             log.error(e.getMessage());
-            return hotelPropertyService.selectByPrimaryKey(record.getItemID());
+            return null;
         }
     }
 
@@ -96,7 +96,7 @@ public class HotelPropertyController {
         } catch (Exception e) {
             log.info("update itemID={}, failed.", record.getItemID());
             log.error(e.getMessage());
-            return hotelPropertyService.selectByPrimaryKey(record.getItemID());
+            return null;
         }
     }
 

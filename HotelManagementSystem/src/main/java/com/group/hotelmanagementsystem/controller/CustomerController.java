@@ -96,7 +96,7 @@ public class CustomerController {
         } catch (Exception e) {
             log.info("updateSelective customerID={} failed.", record.getCustomerID());
             log.error(e.getMessage());
-            return customerService.selectByPrimaryKey(record.getCustomerID());
+            return null;
         }
     }
 
@@ -110,7 +110,7 @@ public class CustomerController {
         } catch (Exception e) {
             log.info("update customerID={} failed.", record.getCustomerID());
             log.error(e.getMessage());
-            return customerService.selectByPrimaryKey(record.getCustomerID());
+            return null;
         }
     }
 

@@ -1,19 +1,14 @@
 package com.group.hotelmanagementsystem.controller;
 
-import com.group.hotelmanagementsystem.entity.CheckInRecord;
-import com.group.hotelmanagementsystem.entity.Customer;
-import com.group.hotelmanagementsystem.entity.ReservationRecord;
-import com.group.hotelmanagementsystem.entity.Room;
-import com.group.hotelmanagementsystem.service.CheckInRecordService;
-import com.group.hotelmanagementsystem.service.CustomerService;
-import com.group.hotelmanagementsystem.service.ReservationRecordService;
-import com.group.hotelmanagementsystem.service.RoomService;
+import com.group.hotelmanagementsystem.entity.*;
+import com.group.hotelmanagementsystem.service.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
@@ -28,6 +23,9 @@ public class CheckInRecordController {
     private CheckInRecordService checkInRecordService;
 
     @Autowired
+    private CheckOutRecordService checkOutRecordService;
+
+    @Autowired
     private CustomerService customerService;
 
     @Autowired
@@ -35,6 +33,9 @@ public class CheckInRecordController {
 
     @Autowired
     private ReservationRecordService reservationRecordService;
+
+    @Autowired
+    private FinancialRecordService financialRecordService;
 
     @RequestMapping(value = "/deleteByPrimaryKey")
     public boolean deleteByPrimaryKey(@RequestParam("checkInRecordID") Integer checkInRecordID) {
@@ -69,15 +70,21 @@ public class CheckInRecordController {
                 customerService.insert(param.getCustomer());
             } else param.setCustomer(customer);
             param.getCheckInRecord().setCustomerID(param.getCustomer().getCustomerID());
+
+            // verify check out or not
+            if (checkInRecordService.selectByCustomerIsCheckOut(param.getCheckInRecord().getCustomerID()) != null) {
+                log.info("Insert - CustomerID={} checkInRecord already exist", param.getCheckInRecord().getCustomerID());
+                return null;
+            }
+
             // update param
             if (updateRoom(param)) {
                 log.info("Insert - Room update success");
-            } else log.info("Insert - Room update failed");
-            // verify check out or not
-            if (checkInRecordService.selectByCustomerIsCheckOut(param.getCheckInRecord().getCustomerID()) != null) {
-                log.info("Insert - Room checkInRecord already exist");
+            } else {
+                log.info("Insert - Room update failed");
                 return null;
             }
+
             // insert check in record
             checkInRecordService.insert(param.getCheckInRecord());
             log.info("Insert success");
@@ -102,7 +109,11 @@ public class CheckInRecordController {
             // update param
             if (updateRoom(param)) {
                 log.info("InsertSelective - Room update success");
-            } else log.info("InsertSelective - Room update failed");
+            } else {
+                log.info("InsertSelective - Room update failed");
+                return null;
+            }
+
             // verify check out or not
             if (checkInRecordService.selectByCustomerIsCheckOut(param.getCheckInRecord().getCustomerID()) != null) {
                 log.info("InsertSelective - Room checkInRecord already exist");
@@ -144,7 +155,7 @@ public class CheckInRecordController {
         }catch (Exception e){
             log.info("update checkInRecordID={} failed.", param.getCheckInRecord().getCheckInRecordID());
             log.error(e.getMessage());
-            return checkInRecordService.selectByPrimaryKey(param.getCheckInRecord().getCheckInRecordID());
+            return null;
         }
     }
 
@@ -160,7 +171,7 @@ public class CheckInRecordController {
         } catch (Exception e) {
             log.info("updateSelective checkInRecordID={} failed.", param.getCheckInRecord().getCheckInRecordID());
             log.error(e.getMessage());
-            return checkInRecordService.selectByPrimaryKey(param.getCheckInRecord().getCheckInRecordID());
+            return null;
         }
     }
 
@@ -180,18 +191,56 @@ public class CheckInRecordController {
     @RequestMapping(value = "/checkOut")
     public boolean checkOut(@RequestParam("checkInRecordID") Integer checkInRecordID) {
         try {
-            CheckInRecord checkInRecord = new CheckInRecord();
-            checkInRecord.setCheckInRecordID(checkInRecordID);
+            log.info("Get the checkInRecordID: {}", checkInRecordID);
+            CheckInRecord checkInRecord = checkInRecordService.selectByPrimaryKey(checkInRecordID);
             checkInRecord.setCheckOutOrNot(true);
+
+            log.info("Get the roomID: {}", checkInRecord.getRoomID());
+            Room room = roomService.selectByPrimaryKey(checkInRecord.getRoomID());
+            room.setRoomStatusID(1);
+
             log.info("Check Out checkInRecordID={}, ...", checkInRecordID);
-            return checkInRecordService.updateByPrimaryKeySelective(checkInRecord) >= 1;
+            checkInRecordService.updateByPrimaryKeySelective(checkInRecord);
+            roomService.updateByPrimaryKeySelective(room);
+            log.info("Check Out checkInRecordID={} success.", checkInRecordID);
+
+            // insert check out record
+            try {
+                // create a new checkOut record
+                CheckOutRecord checkOutRecord = new CheckOutRecord();
+                checkOutRecord.setCustomerID(checkInRecord.getCustomer().getCustomerID());
+                checkOutRecord.setRoomID(room.getRoomID());
+                checkOutRecord.setCheckInTime(checkInRecord.getCheckInTime());
+                Timestamp currentTime = new Timestamp(System.currentTimeMillis()); // get current time
+                checkOutRecord.setCheckOutTime(currentTime);
+                checkOutRecord.setStaffID(checkInRecord.getStaffID());
+                checkOutRecord.setRecordTime(currentTime);
+
+                // insert a new checkOut record
+                checkOutRecordService.insert(checkOutRecord);
+                log.info("Insert checkOutRecord success.");
+
+                // insert a new financial record
+                log.info("Insert a new Financial record....");
+                FinancialRecord financialRecord = new FinancialRecord();
+                RoomType roomType = room.getRoomType();
+                financialRecord.setAmount(roomType.getRoomPrice());
+                financialRecord.setDate(currentTime);
+                financialRecord.setIncomeOrExpense("Room Revenue");
+                financialRecordService.insert(financialRecord);
+                log.info("Insert - Financial record success");
+            } catch (Exception e) {
+                log.info("Insert checkOutRecord failed.");
+                log.error(e.getMessage());
+                return false;
+            }
+            return true;
         } catch (Exception e) {
             log.info("Check Out checkInRecordID={} failed.", checkInRecordID);
             log.error(e.getMessage());
             return false;
         }
     }
-
 
 
     @Setter
@@ -218,20 +267,28 @@ public class CheckInRecordController {
      */
     public boolean updateRoom(ParamOfCheckInRecord param) {
         try {
-            // verify Reservation Record
+            log.info("Search the Reservation and Room ......");
+            // get Reservation Record and room
             ReservationRecord reservationRecord = reservationRecordService.selectByCustomerName(param.getCustomer().getCustomerName());
             Room room = roomService.selectByPrimaryKey(param.getCheckInRecord().getRoomID());
 
             // check the room status
+            log.info("Verify the Room......");
             if (room.getRoomStatusID() == 3) {
+                log.info("This room is already in use.");
                 return false;
             }
+
+            // check the record
             if (reservationRecord != null) {
                 // update room status
                 Room reservedRoom = new Room();
                 reservedRoom.setRoomStatusID(4);
                 List<Room> roomList;
+
+                log.info("check the room type......");
                 if (Objects.equals(reservationRecord.getRoomTypeID(), room.getRoomTypeID())) {
+                    log.info("The reserved room type is the same as the current room type.");
                     // verify room status
                     if (room.getRoomStatusID() != 4) {
                         // update reserved room
@@ -242,6 +299,7 @@ public class CheckInRecordController {
                         roomService.updateByPrimaryKeySelective(reservedRoom);
                     }
                 } else {
+                    log.info("The reserved room type is the different from the current room type.");
                     // update reserved room
                     reservedRoom.setRoomTypeID(reservationRecord.getRoomTypeID());
                     roomList = roomService.selectByRoomStatusIDAndRoomTypeID(reservedRoom);
@@ -249,6 +307,11 @@ public class CheckInRecordController {
                     reservedRoom.setRoomStatusID(1);
                     roomService.updateByPrimaryKeySelective(reservedRoom);
                 }
+                log.info("update the reservation status......");
+                reservationRecord.setReservationStatusID(2);
+                reservationRecordService.updateByPrimaryKeySelective(reservationRecord);
+            } else {
+                log.info("Reservation record is null.");
             }
             // update check in room
             room.setRoomStatusID(3);

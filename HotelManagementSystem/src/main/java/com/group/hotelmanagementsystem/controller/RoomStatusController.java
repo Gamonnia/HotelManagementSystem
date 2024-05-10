@@ -91,7 +91,7 @@ public class RoomStatusController {
         } catch (Exception e) {
             log.info("updateSelective roomStatusID={} failed.", record.getRoomStatusID());
             log.error(e.getMessage());
-            return roomStatusService.selectByPrimaryKey(record.getRoomStatusID());
+            return null;
         }
     }
 
@@ -105,7 +105,7 @@ public class RoomStatusController {
         } catch (Exception e) {
             log.info("update roomStatusID={} failed.", record.getRoomStatusID());
             log.error(e.getMessage());
-            return roomStatusService.selectByPrimaryKey(record.getRoomStatusID());
+            return null;
         }
     }
 

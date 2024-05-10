@@ -83,7 +83,7 @@ public class FinancialRecordController {
         } catch (Exception e) {
             log.info("updateSelective financialRecordID={} failed.", record.getFinancialRecordID());
             log.error(e.getMessage());
-            return financialRecordService.selectByPrimaryKey(record.getFinancialRecordID());
+            return null;
         }
     }
 
@@ -97,7 +97,7 @@ public class FinancialRecordController {
         } catch (Exception e) {
             log.info("update financialRecordID={} failed.", record.getFinancialRecordID());
             log.error(e.getMessage());
-            return financialRecordService.selectByPrimaryKey(record.getFinancialRecordID());
+            return null;
         }
     }
 
